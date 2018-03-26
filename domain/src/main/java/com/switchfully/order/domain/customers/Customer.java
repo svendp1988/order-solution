@@ -17,7 +17,6 @@ public class Customer {
     private PhoneNumber phoneNumber;
 
     private Customer(CustomerBuilder customerBuilder) {
-        this.id = customerBuilder.id;
         this.firstname = customerBuilder.firstname;
         this.lastname = customerBuilder.lastname;
         this.email = customerBuilder.email;
@@ -59,7 +58,6 @@ public class Customer {
 
     public static class CustomerBuilder extends Builder<Customer> {
 
-        private UUID id;
         private String firstname;
         private String lastname;
         private Email email;
@@ -76,11 +74,6 @@ public class Customer {
         @Override
         public Customer build() {
             return new Customer(this);
-        }
-
-        public CustomerBuilder withId(UUID id) {
-            this.id = id;
-            return this;
         }
 
         public CustomerBuilder withFirstname(String firstname) {

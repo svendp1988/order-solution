@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.UUID;
@@ -51,7 +52,6 @@ public class CustomerMapperTest {
         EmailDto emailDto = new EmailDto();
         PhoneNumberDto phoneNumberDto = new PhoneNumberDto();
 
-        UUID id = UUID.randomUUID();
         Address address = anAddress().build();
         Email email = anEmail().build();
         PhoneNumber phoneNumber = aPhoneNumber().build();
@@ -60,20 +60,23 @@ public class CustomerMapperTest {
         when(emailMapperMock.toDto(email)).thenReturn(emailDto);
         when(phoneNumberMapperMock.toDto(phoneNumber)).thenReturn(phoneNumberDto);
 
-        // when
-        CustomerDto customerDto = customerMapper.toDto(Customer.CustomerBuilder.customer()
-                .withId(id)
+        Customer customer = Customer.CustomerBuilder.customer()
                 .withFirstname("Koen")
                 .withLastname("Kasteels")
                 .withAddress(address)
                 .withEmail(email)
                 .withPhoneNumber(phoneNumber)
-                .build());
+                .build();
+        UUID customerId = UUID.randomUUID();
+        Whitebox.setInternalState(customer, "id", customerId);
+
+        // when
+        CustomerDto customerDto = customerMapper.toDto(customer);
 
         // then
         Assertions.assertThat(customerDto)
                 .isEqualToComparingFieldByField(new CustomerDto()
-                        .withId(id)
+                        .withId(customerId)
                         .withFirstname("Koen")
                         .withLastname("Kasteels")
                         .withAddress(addressDto)
@@ -102,7 +105,6 @@ public class CustomerMapperTest {
 
         // when
         Customer customer = customerMapper.toDomain(new CustomerDto()
-                .withId(UUID.randomUUID())
                 .withFirstname("Tim")
                 .withLastname("Timmelston")
                 .withAddress(addressDto)
@@ -112,7 +114,6 @@ public class CustomerMapperTest {
         // then
         Assertions.assertThat(customer)
                 .isEqualToComparingFieldByField(Customer.CustomerBuilder.customer()
-                        .withId(null)
                         .withFirstname("Tim")
                         .withLastname("Timmelston")
                         .withAddress(address)
@@ -130,10 +131,7 @@ public class CustomerMapperTest {
         Customer customer = customerMapper.toDomain(new CustomerDto()
                 .withId(UUID.randomUUID()));
 
-        Assertions.assertThat(customer)
-                .isEqualToComparingFieldByField(Customer.CustomerBuilder.customer()
-                        .withId(null)
-                        .build());
+        Assertions.assertThat(customer.getId()).isNull();
     }
 
 }

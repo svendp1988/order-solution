@@ -6,8 +6,6 @@ import com.switchfully.order.domain.customers.emails.Email;
 import com.switchfully.order.domain.customers.phonenumbers.PhoneNumber;
 import com.switchfully.order.infrastructure.builder.Builder;
 
-import java.util.UUID;
-
 import static com.switchfully.order.domain.customers.addresses.AddressTestBuilder.anAddress;
 import static com.switchfully.order.domain.customers.emails.EmailTestBuilder.anEmail;
 import static com.switchfully.order.domain.customers.phonenumbers.PhoneNumberTestBuilder.aPhoneNumber;
@@ -61,11 +59,6 @@ public class CustomerTestBuilder extends Builder<Customer> {
 
     public CustomerTestBuilder withPhoneNumber(PhoneNumber phoneNumber) {
         customerBuilder.withPhoneNumber(phoneNumber);
-        return this;
-    }
-
-    public CustomerTestBuilder withId(UUID id) {
-        customerBuilder.withId(id);
         return this;
     }
 }

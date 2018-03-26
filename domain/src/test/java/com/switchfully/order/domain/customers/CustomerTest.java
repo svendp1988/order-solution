@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.internal.util.reflection.Whitebox;
 
 import java.util.UUID;
 
@@ -27,11 +28,13 @@ public class CustomerTest {
     @Test
     public void generateId_givenCustomerWithId_whenGeneratingId_thenThrowException() {
         UUID id = UUID.randomUUID();
+        Customer customer = aCustomer().build();
+        Whitebox.setInternalState(customer, "id", id);
 
         expectedException.expect(IllegalStateException.class);
         expectedException.expectMessage("Generating an ID for a customer that already has an ID (" + id + ") is not allowed.");
 
-        aCustomer().withId(id).build().generateId();
+        customer.generateId();
     }
 
 }
