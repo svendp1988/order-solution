@@ -1,4 +1,4 @@
-package com.switchfully.order.domain.customers;
+package com.switchfully.order.domain;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Rule;
@@ -9,16 +9,15 @@ import org.mockito.internal.util.reflection.Whitebox;
 import java.util.UUID;
 
 import static com.switchfully.order.domain.customers.CustomerTestBuilder.aCustomer;
-import static org.junit.Assert.*;
 
-public class CustomerTest {
+public class EntityTest {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void generateId_givenCustomerWithoutId_whenGeneratingId_thenGenerateId() {
-        Customer aCustomer = aCustomer().build();
+        Entity aCustomer = aCustomer().build();
         aCustomer.generateId();
         Assertions.assertThat(aCustomer.getId())
                 .isNotNull()
@@ -28,7 +27,7 @@ public class CustomerTest {
     @Test
     public void generateId_givenCustomerWithId_whenGeneratingId_thenThrowException() {
         UUID id = UUID.randomUUID();
-        Customer customer = aCustomer().build();
+        Entity customer = aCustomer().build();
         Whitebox.setInternalState(customer, "id", id);
 
         expectedException.expect(IllegalStateException.class);
