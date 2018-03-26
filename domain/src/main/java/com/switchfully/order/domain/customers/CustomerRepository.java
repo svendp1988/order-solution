@@ -1,29 +1,15 @@
 package com.switchfully.order.domain.customers;
 
-import com.switchfully.order.domain.customers.dummydatabase.CustomerDatabase;
+import com.switchfully.order.domain.Repository;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.UUID;
 
 @Named
-public class CustomerRepository {
-
-    private CustomerDatabase customerDatabase;
+public class CustomerRepository extends Repository<Customer, CustomerDatabase>{
 
     @Inject
-    public CustomerRepository(CustomerDatabase customerDatabase) {
-        this.customerDatabase = customerDatabase;
+    public CustomerRepository(CustomerDatabase database) {
+        super(database);
     }
-
-    public Customer save(Customer customer) {
-        customer.generateId();
-        customerDatabase.storeCustomer(customer);
-        return customer;
-    }
-
-    public Customer get(UUID customerId) {
-        return customerDatabase.getCustomers().get(customerId);
-    }
-
 }
