@@ -1,6 +1,7 @@
 package com.switchfully.order.service.customers;
 
 import com.switchfully.order.domain.customers.Customer;
+import com.switchfully.order.domain.customers.CustomerRepository;
 
 import javax.inject.Inject;
 import javax.inject.Named;

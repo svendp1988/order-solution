@@ -1,7 +1,6 @@
-package com.switchfully.order.service.customers;
+package com.switchfully.order.domain.customers;
 
-import com.switchfully.order.domain.customers.Customer;
-import com.switchfully.order.service.customers.dummydatabase.CustomerDatabase;
+import com.switchfully.order.domain.customers.dummydatabase.CustomerDatabase;
 
 import javax.inject.Inject;
 import javax.inject.Named;

@@ -2,6 +2,7 @@ package com.switchfully.order.service.customers;
 
 import com.switchfully.order.IntegrationTest;
 import com.switchfully.order.domain.customers.Customer;
+import com.switchfully.order.domain.customers.CustomerRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 

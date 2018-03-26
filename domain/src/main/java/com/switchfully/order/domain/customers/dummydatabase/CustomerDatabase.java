@@ -1,4 +1,4 @@
-package com.switchfully.order.service.customers.dummydatabase;
+package com.switchfully.order.domain.customers.dummydatabase;
 
 import com.switchfully.order.domain.customers.Customer;
 
