@@ -27,4 +27,12 @@ public abstract class EntityDatabase<T extends Entity> {
         entities.put(entity.getId(), entity);
     }
 
+    /**
+     * Since we don't use transactions yet, we need a way to reset the database
+     * in the tests. We'll use this method. Obviously this is a method that should
+     * never be available in production...
+     */
+    void reset() {
+        entities = new HashMap<>();
+    }
 }

@@ -21,4 +21,9 @@ public final class Price {
     public float getAmountAsFloat() {
         return amount.floatValue();
     }
+
+    @Override
+    public String toString() {
+        return "Price{" + "amount=" + amount + '}';
+    }
 }

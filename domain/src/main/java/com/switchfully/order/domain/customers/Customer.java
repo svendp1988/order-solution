@@ -6,6 +6,8 @@ import com.switchfully.order.domain.customers.emails.Email;
 import com.switchfully.order.domain.customers.phonenumbers.PhoneNumber;
 import com.switchfully.order.infrastructure.builder.Builder;
 
+import java.util.UUID;
+
 public class Customer extends Entity {
 
     private String firstname;
@@ -15,6 +17,7 @@ public class Customer extends Entity {
     private PhoneNumber phoneNumber;
 
     private Customer(CustomerBuilder customerBuilder) {
+        super(customerBuilder.id);
         this.firstname = customerBuilder.firstname;
         this.lastname = customerBuilder.lastname;
         this.email = customerBuilder.email;
@@ -44,6 +47,7 @@ public class Customer extends Entity {
 
     public static class CustomerBuilder extends Builder<Customer> {
 
+        private UUID id;
         private String firstname;
         private String lastname;
         private Email email;
@@ -60,6 +64,11 @@ public class Customer extends Entity {
         @Override
         public Customer build() {
             return new Customer(this);
+        }
+
+        public CustomerBuilder withId(UUID id) {
+            this.id = id;
+            return this;
         }
 
         public CustomerBuilder withFirstname(String firstname) {

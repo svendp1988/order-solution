@@ -4,6 +4,8 @@ import com.switchfully.order.domain.items.Item.ItemBuilder;
 import com.switchfully.order.domain.items.prices.Price;
 import com.switchfully.order.infrastructure.builder.Builder;
 
+import java.util.UUID;
+
 import static com.switchfully.order.domain.items.Item.ItemBuilder.item;
 import static java.math.BigDecimal.valueOf;
 
@@ -30,6 +32,11 @@ public class ItemTestBuilder extends Builder<Item>{
     @Override
     public Item build() {
         return itemBuilder.build();
+    }
+
+    public ItemTestBuilder withId(UUID id) {
+        itemBuilder.withId(id);
+        return this;
     }
 
     public ItemTestBuilder withName(String name) {

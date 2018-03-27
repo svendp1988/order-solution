@@ -52,4 +52,24 @@ public class ItemMapperTest {
                         .build());
     }
 
+    @Test
+    public void toDomain_givenId_thenAlsoCorrectlyMapId() {
+        UUID id = UUID.randomUUID();
+        Item item = new ItemMapper().toDomain(new ItemDto()
+                .withId(id)
+                .withName("Half-Life 3")
+                .withDescription("Boehoehoe")
+                .withPrice(45f)
+                .withAmountOfStock(50520));
+
+        assertThat(item)
+                .isEqualToComparingFieldByFieldRecursively(item()
+                        .withId(id)
+                        .withName("Half-Life 3")
+                        .withDescription("Boehoehoe")
+                        .withPrice(Price.create(BigDecimal.valueOf(45.0)))
+                        .withAmountOfStock(50520)
+                        .build());
+    }
+
 }

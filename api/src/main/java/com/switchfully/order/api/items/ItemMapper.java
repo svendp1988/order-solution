@@ -6,6 +6,7 @@ import com.switchfully.order.infrastructure.dto.Mapper;
 
 import javax.inject.Named;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import static com.switchfully.order.domain.items.Item.ItemBuilder.item;
 
@@ -15,6 +16,7 @@ public class ItemMapper extends Mapper<ItemDto, Item> {
     @Override
     public Item toDomain(ItemDto itemDto) {
         return item()
+                .withId(itemDto.getId() == null ? null : UUID.fromString(itemDto.getId()))
                 .withName(itemDto.getName())
                 .withDescription(itemDto.getDescription())
                 .withAmountOfStock(itemDto.getAmountOfStock())

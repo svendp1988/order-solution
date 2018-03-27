@@ -4,6 +4,8 @@ import com.switchfully.order.domain.Entity;
 import com.switchfully.order.domain.items.prices.Price;
 import com.switchfully.order.infrastructure.builder.Builder;
 
+import java.util.UUID;
+
 public class Item extends Entity {
 
     private String name;
@@ -12,6 +14,7 @@ public class Item extends Entity {
     private int amountOfStock;
 
     public Item(ItemBuilder itemBuilder) {
+        super(itemBuilder.id);
         name = itemBuilder.name;
         description = itemBuilder.description;
         price = itemBuilder.price;
@@ -34,8 +37,20 @@ public class Item extends Entity {
         return amountOfStock;
     }
 
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + getId() + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", amountOfStock=" + amountOfStock +
+                '}';
+    }
+
     public static class ItemBuilder extends Builder<Item> {
 
+        private UUID id;
         private String name;
         private String description;
         private Price price;
@@ -48,6 +63,11 @@ public class Item extends Entity {
         @Override
         public Item build() {
             return new Item(this);
+        }
+
+        public ItemBuilder withId(UUID id) {
+            this.id = id;
+            return this;
         }
 
         public ItemBuilder withName(String name) {
