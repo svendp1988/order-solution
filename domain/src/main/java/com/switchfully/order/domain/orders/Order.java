@@ -5,6 +5,7 @@ import com.switchfully.order.domain.items.prices.Price;
 import com.switchfully.order.domain.orders.orderitems.OrderItem;
 import com.switchfully.order.infrastructure.builder.Builder;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +31,10 @@ public class Order extends Entity {
     }
 
     public Price getTotalPrice() {
-        return null;
+        return orderItems.stream()
+                .map(OrderItem::getItemPrice)
+                .reduce(Price.create(BigDecimal.ZERO),
+                        (price1, price2) -> Price.create(price1.getAmount().add(price2.getAmount())));
     }
 
     @Override
