@@ -1,5 +1,6 @@
 package com.switchfully.order.service.customers;
 
+import com.switchfully.order.domain.EntityValidator;
 import com.switchfully.order.domain.customers.Customer;
 
 import javax.inject.Named;
@@ -11,13 +12,10 @@ import javax.inject.Named;
  * what fields are required and what the valid values are for each field.
  */
 @Named
-public class CustomerValidator {
+public class CustomerValidator extends EntityValidator<Customer> {
 
-    public boolean isValidForCreation(Customer customer) {
-        return !isAFieldEmptyOrNull(customer) && customer.getId() == null;
-    }
-
-    private boolean isAFieldEmptyOrNull(Customer customer) {
+    @Override
+    protected boolean isAFieldEmptyOrNull(Customer customer) {
         return customer == null
                 || isEmptyOrNull(customer.getFirstname())
                 || isEmptyOrNull(customer.getLastname())
@@ -32,10 +30,6 @@ public class CustomerValidator {
                 || customer.getPhoneNumber() == null
                 || isEmptyOrNull(customer.getPhoneNumber().getCountryCallingCode())
                 || isEmptyOrNull(customer.getPhoneNumber().getNumber());
-    }
-
-    private boolean isEmptyOrNull(String attribute) {
-        return attribute == null || attribute.isEmpty();
     }
 
 }

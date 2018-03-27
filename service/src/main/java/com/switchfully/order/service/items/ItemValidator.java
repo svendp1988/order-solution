@@ -1,5 +1,6 @@
 package com.switchfully.order.service.items;
 
+import com.switchfully.order.domain.EntityValidator;
 import com.switchfully.order.domain.items.Item;
 
 import javax.inject.Named;
@@ -11,26 +12,15 @@ import javax.inject.Named;
  * what fields are required and what the valid values are for each field.
  */
 @Named
-public class ItemValidator {
+public class ItemValidator extends EntityValidator<Item>{
 
-    public boolean isValidForCreation(Item item) {
-        return !isAFieldEmptyOrNull(item) && item.getId() == null;
-    }
-
-    public boolean isValidForUpdating(Item item) {
-        return !isAFieldEmptyOrNull(item) && item.getId() != null;
-    }
-
-    private boolean isAFieldEmptyOrNull(Item item) {
+    @Override
+    protected boolean isAFieldEmptyOrNull(Item item) {
         return item == null
                 || isEmptyOrNull(item.getName())
                 || isEmptyOrNull(item.getDescription())
                 || item.getAmountOfStock() < 0
                 || item.getPrice() == null
                 || item.getPrice().getAmountAsFloat() <= 0;
-    }
-
-    private boolean isEmptyOrNull(String attribute) {
-        return attribute == null || attribute.isEmpty();
     }
 }
