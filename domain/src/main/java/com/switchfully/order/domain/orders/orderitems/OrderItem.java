@@ -21,11 +21,7 @@ public final class OrderItem {
         itemId = orderItemBuilder.itemId;
         itemPrice = orderItemBuilder.itemPrice;
         orderedAmount = orderItemBuilder.orderedAmount;
-        shippingDate = calculateShippingDate();
-    }
-
-    private LocalDate calculateShippingDate() {
-        return null;
+        shippingDate = orderItemBuilder.shippingDate;
     }
 
     public static class OrderItemBuilder extends Builder<OrderItem> {
@@ -33,6 +29,7 @@ public final class OrderItem {
         private UUID itemId;
         private Price itemPrice;
         private int orderedAmount;
+        private LocalDate shippingDate;
 
         @Override
         public OrderItem build() {
@@ -51,6 +48,11 @@ public final class OrderItem {
 
         public OrderItemBuilder withOrderedAmount(int orderedAmount) {
             this.orderedAmount = orderedAmount;
+            return this;
+        }
+
+        public OrderItemBuilder withShippingDate(LocalDate shippingDate) {
+            this.shippingDate = shippingDate;
             return this;
         }
     }
