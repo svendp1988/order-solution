@@ -2,12 +2,15 @@ package com.switchfully.order.service.customers;
 
 import com.switchfully.order.domain.customers.Customer;
 
+import javax.inject.Named;
+
 /**
  * Instead of our custom validator(s),
  * we are better of using Javax Validation (we didn't use it here, to not over-complexify the solution).
  * That way, we can indicate on our Domain classes (such as Customer and Item)
  * what fields are required and what the valid values are for each field.
  */
+@Named
 public class CustomerValidator {
 
     public boolean isValidForCreation(Customer customer) {

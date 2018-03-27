@@ -45,6 +45,18 @@ public class Customer extends Entity {
         return phoneNumber;
     }
 
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id='" + getId() + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email=" + email +
+                ", address=" + address +
+                ", phoneNumber=" + phoneNumber +
+                '}';
+    }
+
     public static class CustomerBuilder extends Builder<Customer> {
 
         private UUID id;

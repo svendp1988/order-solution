@@ -20,6 +20,13 @@ public final class PhoneNumber {
         return countryCallingCode;
     }
 
+    @Override
+    public String toString() {
+        return "PhoneNumber{" + "number='" + number + '\'' +
+                ", countryCallingCode='" + countryCallingCode + '\'' +
+                '}';
+    }
+
     public static class PhoneNumberBuilder extends Builder<PhoneNumber> {
         private String number;
         private String countryCallingCode;

@@ -32,6 +32,15 @@ public final class Address {
         return country;
     }
 
+    @Override
+    public String toString() {
+        return "Address{" + "streetName='" + streetName + '\'' +
+                ", houseNumber='" + houseNumber + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", country='" + country + '\'' +
+                '}';
+    }
+
     public static class AddressBuilder extends Builder<Address> {
 
         private String streetName;

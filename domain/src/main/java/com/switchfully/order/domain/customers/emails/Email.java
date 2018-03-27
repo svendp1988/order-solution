@@ -26,6 +26,14 @@ public final class Email {
         return complete;
     }
 
+    @Override
+    public String toString() {
+        return "Email{" + "localPart='" + localPart + '\'' +
+                ", domain='" + domain + '\'' +
+                ", complete='" + complete + '\'' +
+                '}';
+    }
+
     public static class EmailBuilder extends Builder<Email> {
 
         private String localPart;
