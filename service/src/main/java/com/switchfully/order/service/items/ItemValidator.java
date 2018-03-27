@@ -14,7 +14,7 @@ import javax.inject.Named;
 public class ItemValidator {
 
     public boolean isValidForCreation(Item item) {
-        return !isAFieldEmptyOrNull(item);
+        return !isAFieldEmptyOrNull(item) && item.getId() == null;
     }
 
     public boolean isValidForUpdating(Item item) {

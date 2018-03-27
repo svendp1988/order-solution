@@ -22,6 +22,15 @@ public class ItemValidatorTest {
     }
 
     @Test
+    public void isValidForCreation_givenId_thenNotValidForCreation() {
+        assertThat(new ItemValidator()
+                .isValidForCreation(anItem()
+                        .withId(UUID.randomUUID())
+                        .build()))
+                .isFalse();
+    }
+
+    @Test
     public void isValidForCreation_givenEmptyName_thenNotValidForCreation() {
         assertThat(new ItemValidator()
             .isValidForCreation(anItem()
