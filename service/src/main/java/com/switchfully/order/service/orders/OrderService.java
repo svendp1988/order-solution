@@ -22,7 +22,9 @@ public class OrderService {
     private OrderValidator orderValidator;
 
     @Inject
-    public OrderService(CustomerRepository customerRepository, ItemRepository itemRepository, OrderRepository orderRepository,
+    public OrderService(CustomerRepository customerRepository,
+                        ItemRepository itemRepository,
+                        OrderRepository orderRepository,
                         OrderValidator orderValidator) {
         this.customerRepository = customerRepository;
         this.itemRepository = itemRepository;
