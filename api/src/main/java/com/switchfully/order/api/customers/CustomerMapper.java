@@ -8,6 +8,7 @@ import com.switchfully.order.infrastructure.dto.Mapper;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.UUID;
 
 @Named
 public class CustomerMapper extends Mapper<CustomerDto, Customer> {
@@ -37,6 +38,7 @@ public class CustomerMapper extends Mapper<CustomerDto, Customer> {
     @Override
     public Customer toDomain(CustomerDto customerDto) {
         return Customer.CustomerBuilder.customer()
+                .withId(customerDto.getId() == null ? null : UUID.fromString(customerDto.getId()))
                 .withLastname(customerDto.getLastname())
                 .withFirstname(customerDto.getFirstname())
                 .withAddress(addressMapper.toDomain(customerDto.getAddress()))

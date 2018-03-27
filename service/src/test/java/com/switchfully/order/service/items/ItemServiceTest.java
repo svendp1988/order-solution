@@ -53,7 +53,7 @@ public class ItemServiceTest {
     public void updateItem_happyPath() {
         Item item = anItem().build();
         Mockito.when(itemValidatorMock.isValidForUpdating(item)).thenReturn(true);
-        Mockito.when(itemRepositoryMock.save(item)).thenReturn(item);
+        Mockito.when(itemRepositoryMock.update(item)).thenReturn(item);
 
         Item updatedItem = itemService.updateItem(item);
 

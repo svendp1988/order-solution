@@ -127,11 +127,11 @@ public class CustomerMapperTest {
     }
 
     @Test
-    public void toDomain_neverMapTheID() {
+    public void toDomain_mapTheID() {
         Customer customer = customerMapper.toDomain(new CustomerDto()
                 .withId(UUID.randomUUID()));
 
-        Assertions.assertThat(customer.getId()).isNull();
+        Assertions.assertThat(customer.getId()).isNotNull();
     }
 
 }
