@@ -25,7 +25,7 @@ public class ItemController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ItemDto createCustomer(@RequestBody ItemDto itemDto) {
+    public ItemDto createItem(@RequestBody ItemDto itemDto) {
         return itemMapper.toDto(
                 itemService.createItem(
                         itemMapper.toDomain(itemDto)));
