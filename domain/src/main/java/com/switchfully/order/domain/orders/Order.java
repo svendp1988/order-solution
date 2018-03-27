@@ -30,6 +30,13 @@ public class Order extends Entity {
         private List<OrderItem> orderItems;
         private UUID customerId;
 
+        private OrderBuilder() {
+        }
+
+        public static OrderBuilder order() {
+            return new OrderBuilder();
+        }
+
         @Override
         public Order build() {
             return new Order(this);

@@ -31,6 +31,13 @@ public final class OrderItem {
         private int orderedAmount;
         private LocalDate shippingDate;
 
+        private OrderItemBuilder() {
+        }
+
+        public static OrderItemBuilder orderItem() {
+            return new OrderItemBuilder();
+        }
+
         @Override
         public OrderItem build() {
             return new OrderItem(this);
