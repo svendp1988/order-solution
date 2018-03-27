@@ -14,16 +14,16 @@ public abstract class EntityDatabase<T extends Entity> {
         entities = new HashMap<>();
     }
 
-    public void poplulate(T... entities) {
+    void poplulate(T... entities) {
         this.entities = Arrays.stream(entities)
                 .collect(Collectors.toMap(Entity::getId, entity -> entity));
     }
 
-    public Map<UUID, T> getAll() {
+    Map<UUID, T> getAll() {
         return Collections.unmodifiableMap(entities);
     }
 
-    public void save(T entity) {
+    void save(T entity) {
         entities.put(entity.getId(), entity);
     }
 

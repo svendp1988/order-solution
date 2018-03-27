@@ -25,6 +25,12 @@
             <groupId>com.switchfully.order</groupId>
             <artifactId>infrastructure</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.switchfully.order</groupId>
+            <artifactId>infrastructure</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
