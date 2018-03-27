@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.inject.Inject;
 
 @RestController
-@RequestMapping(path = "/customers")
+@RequestMapping(path = "/" + CustomerController.RESOURCE_NAME)
 public class CustomerController {
 
+    public static final String RESOURCE_NAME = "customers";
     private CustomerService customerService;
     private CustomerMapper customerMapper;
 

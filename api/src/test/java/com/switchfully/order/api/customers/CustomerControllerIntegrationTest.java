@@ -31,7 +31,7 @@ public class CustomerControllerIntegrationTest extends ControllerIntegrationTest
                         .withCountry("GothamCountry"));
 
         CustomerDto createdCustomer = new TestRestTemplate()
-                .postForObject(format("http://localhost:%s/%s", getPort(), "customers"), customerToCreate, CustomerDto.class);
+                .postForObject(format("http://localhost:%s/%s", getPort(), CustomerController.RESOURCE_NAME), customerToCreate, CustomerDto.class);
 
         assertCustomerIsEqualIgnoringId(customerToCreate, createdCustomer);
     }
