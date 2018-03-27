@@ -46,6 +46,14 @@ public class OrderService {
         }
     }
 
+    private boolean doAllOrderItemsReferenceAnExistingItem(List<OrderItem> orderItems) {
+        return orderItems.stream()
+                .filter(orderItem -> itemRepository.get(orderItem.getItemId()) == null)
+                .map(nonExistingItem -> false)
+                .findFirst()
+                .orElse(true);
+    }
+
     private void assertOrderingCustomerExists(Order order) {
         if (!doesCustomerExist(order)) {
             throw new EntityNotFoundException("creation of a new order when checking if the referenced customer exists",
@@ -53,22 +61,14 @@ public class OrderService {
         }
     }
 
-    private void assertOrderIsValidForCreation(Order order) {
-        if (!orderValidator.isValidForCreation(order)) {
-            orderValidator.throwInvalidStateException(order, "creation");
-        }
-    }
-
     private boolean doesCustomerExist(Order order) {
         return customerRepository.get(order.getCustomerId()) != null;
     }
 
-    private boolean doAllOrderItemsReferenceAnExistingItem(List<OrderItem> orderItems) {
-        return orderItems.stream()
-                .filter(orderItem -> itemRepository.get(orderItem.getItemId()) == null)
-                .map(nonExistingItem -> false)
-                .findFirst()
-                .orElse(true);
+    private void assertOrderIsValidForCreation(Order order) {
+        if (!orderValidator.isValidForCreation(order)) {
+            orderValidator.throwInvalidStateException(order, "creation");
+        }
     }
 
 
