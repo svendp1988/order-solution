@@ -14,16 +14,25 @@ public class OrderService {
     private CustomerService customerService;
     private ItemService itemService;
     private OrderRepository orderRepository;
+    private OrderValidator orderValidator;
 
     @Inject
-    public OrderService(CustomerService customerService, ItemService itemService, OrderRepository orderRepository) {
+    public OrderService(CustomerService customerService, ItemService itemService, OrderRepository orderRepository,
+                        OrderValidator orderValidator) {
         this.customerService = customerService;
         this.itemService = itemService;
         this.orderRepository = orderRepository;
+        this.orderValidator = orderValidator;
     }
 
     public Order createOrder(Order order) {
+        if (!orderValidator.isValidForCreation(order)) {
+            orderValidator.throwInvalidStateException(order, "creation");
+        }
+        // Search for valid customer
+        // Search for valid item...? Or, in Mapper?
         return orderRepository.save(order);
     }
+
 
 }

@@ -6,6 +6,7 @@ import com.switchfully.order.domain.orders.orderitems.OrderItem;
 import com.switchfully.order.infrastructure.builder.Builder;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,8 +21,25 @@ public class Order extends Entity {
         customerId = orderBuilder.customerId;
     }
 
-    public Price calculateTotalPrice() {
+    public List<OrderItem> getOrderItems() {
+        return Collections.unmodifiableList(orderItems);
+    }
+
+    public UUID getCustomerId() {
+        return customerId;
+    }
+
+    public Price getTotalPrice() {
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{"
+                + "id=" + getId() +
+                ", orderItems=" + orderItems +
+                ", customerId=" + customerId +
+                '}';
     }
 
     public static class OrderBuilder extends Builder<Order> {

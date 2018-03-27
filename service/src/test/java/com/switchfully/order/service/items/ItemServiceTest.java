@@ -42,9 +42,10 @@ public class ItemServiceTest {
     public void createItem_givenItemThatIsNotValidForCreation_thenThrowException() {
         Item item = anItem().build();
         Mockito.when(itemValidatorMock.isValidForCreation(item)).thenReturn(false);
+        Mockito.doThrow(IllegalStateException.class).when(itemValidatorMock)
+                .throwInvalidStateException(item, "creation");
 
         expectedException.expect(IllegalStateException.class);
-        expectedException.expectMessage("Invalid Item provided for creation. Provided object: " + item);
 
         itemService.createItem(item);
     }
@@ -64,9 +65,10 @@ public class ItemServiceTest {
     public void updateItem_givenItemThatIsNotValidForUpdating_thenThrowException() {
         Item item = anItem().build();
         Mockito.when(itemValidatorMock.isValidForUpdating(item)).thenReturn(false);
+        Mockito.doThrow(IllegalStateException.class).when(itemValidatorMock)
+                .throwInvalidStateException(item, "updating");
 
         expectedException.expect(IllegalStateException.class);
-        expectedException.expectMessage("Invalid Item provided for updating. Provided object: " + item);
 
         itemService.updateItem(item);
     }

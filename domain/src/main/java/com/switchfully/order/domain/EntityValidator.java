@@ -1,6 +1,5 @@
 package com.switchfully.order.domain;
 
-
 public abstract class EntityValidator<T extends Entity> {
 
     public boolean isValidForCreation(T entity) {
@@ -15,5 +14,18 @@ public abstract class EntityValidator<T extends Entity> {
 
     protected boolean isEmptyOrNull(String attribute) {
         return attribute == null || attribute.isEmpty();
+    }
+
+    protected boolean isNull(Object object) {
+        return object == null;
+    }
+
+    protected boolean isNotNull(Object object) {
+        return object != null;
+    }
+
+    public void throwInvalidStateException(T entity, String type) {
+        throw new IllegalStateException("Invalid " + (entity == null ? "NULL_ENTITY" : entity.getClass().getSimpleName())
+                + " provided for " + type + ". Provided object: " + (entity == null ? null : entity.toString()));
     }
 }

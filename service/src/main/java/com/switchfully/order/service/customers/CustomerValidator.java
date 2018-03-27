@@ -16,20 +16,20 @@ public class CustomerValidator extends EntityValidator<Customer> {
 
     @Override
     protected boolean isAFieldEmptyOrNull(Customer customer) {
-        return customer == null
+        return isNull(customer)
                 || isEmptyOrNull(customer.getFirstname())
                 || isEmptyOrNull(customer.getLastname())
-                || customer.getAddress() == null
-                || isEmptyOrNull(customer.getAddress().getStreetName())
-                || isEmptyOrNull(customer.getAddress().getHouseNumber())
-                || isEmptyOrNull(customer.getAddress().getPostalCode())
-                || isEmptyOrNull(customer.getAddress().getCountry())
-                || customer.getEmail() == null
-                || isEmptyOrNull(customer.getEmail().getDomain())
-                || isEmptyOrNull(customer.getEmail().getLocalPart())
-                || customer.getPhoneNumber() == null
-                || isEmptyOrNull(customer.getPhoneNumber().getCountryCallingCode())
-                || isEmptyOrNull(customer.getPhoneNumber().getNumber());
+                || isNull(customer.getAddress())
+                    || isEmptyOrNull(customer.getAddress().getStreetName())
+                    || isEmptyOrNull(customer.getAddress().getHouseNumber())
+                    || isEmptyOrNull(customer.getAddress().getPostalCode())
+                    || isEmptyOrNull(customer.getAddress().getCountry())
+                || isNull(customer.getEmail())
+                    || isEmptyOrNull(customer.getEmail().getDomain())
+                    || isEmptyOrNull(customer.getEmail().getLocalPart())
+                || isNull(customer.getPhoneNumber())
+                    || isEmptyOrNull(customer.getPhoneNumber().getCountryCallingCode())
+                    || isEmptyOrNull(customer.getPhoneNumber().getNumber());
     }
 
 }

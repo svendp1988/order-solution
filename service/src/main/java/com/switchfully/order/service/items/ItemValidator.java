@@ -16,11 +16,11 @@ public class ItemValidator extends EntityValidator<Item>{
 
     @Override
     protected boolean isAFieldEmptyOrNull(Item item) {
-        return item == null
+        return isNull(item)
                 || isEmptyOrNull(item.getName())
                 || isEmptyOrNull(item.getDescription())
                 || item.getAmountOfStock() < 0
-                || item.getPrice() == null
-                || item.getPrice().getAmountAsFloat() <= 0;
+                || isNull(item.getPrice())
+                    || item.getPrice().getAmountAsFloat() <= 0;
     }
 }

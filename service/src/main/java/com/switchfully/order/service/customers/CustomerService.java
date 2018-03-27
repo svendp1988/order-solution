@@ -23,8 +23,7 @@ public class CustomerService {
 
     public Customer createCustomer(Customer customer) {
         if (!customerValidator.isValidForCreation(customer)) {
-            throw new IllegalStateException("Invalid Customer provided for creation. Provided object: "
-                    + (customer == null ? null : customer.toString()));
+            customerValidator.throwInvalidStateException(customer, "creation");
         }
         return customerRepository.save(customer);
     }

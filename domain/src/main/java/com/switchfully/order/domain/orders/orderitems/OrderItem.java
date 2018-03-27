@@ -24,6 +24,31 @@ public final class OrderItem {
         shippingDate = orderItemBuilder.shippingDate;
     }
 
+    public UUID getItemId() {
+        return itemId;
+    }
+
+    public Price getItemPrice() {
+        return itemPrice;
+    }
+
+    public int getOrderedAmount() {
+        return orderedAmount;
+    }
+
+    public LocalDate getShippingDate() {
+        return shippingDate;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" + "itemId=" + itemId +
+                ", itemPrice=" + itemPrice +
+                ", orderedAmount=" + orderedAmount +
+                ", shippingDate=" + shippingDate +
+                '}';
+    }
+
     public static class OrderItemBuilder extends Builder<OrderItem> {
 
         private UUID itemId;

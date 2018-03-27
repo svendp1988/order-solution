@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ItemValidatorTest {
 
     @Test
-    public void isValidForCreatio_happyPath() {
+    public void isValidForCreation_happyPath() {
         assertThat(new ItemValidator()
                 .isValidForCreation(anItem()
                         .build()))

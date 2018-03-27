@@ -20,20 +20,15 @@ public class ItemService {
 
     public Item createItem(Item item) {
         if (!itemValidator.isValidForCreation(item)) {
-            throwInvalidStateException(item, "creation");
+            itemValidator.throwInvalidStateException(item, "creation");
         }
         return itemRepository.save(item);
     }
 
     public Item updateItem(Item item) {
         if (!itemValidator.isValidForUpdating(item)) {
-            throwInvalidStateException(item, "updating");
+            itemValidator.throwInvalidStateException(item, "updating");
         }
         return itemRepository.update(item);
-    }
-
-    private void throwInvalidStateException(Item item, String type) {
-        throw new IllegalStateException("Invalid Item provided for " + type + ". Provided object: "
-                + (item == null ? null : item.toString()));
     }
 }

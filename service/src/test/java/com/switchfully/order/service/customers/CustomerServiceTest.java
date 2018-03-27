@@ -43,9 +43,10 @@ public class CustomerServiceTest {
     public void createCustomer_givenCustomerThatIsNotValidForCreation_thenThrowException() {
         Customer customer = aCustomer().build();
         Mockito.when(customerValidatorMock.isValidForCreation(customer)).thenReturn(false);
+        Mockito.doThrow(IllegalStateException.class).when(customerValidatorMock)
+                .throwInvalidStateException(customer, "creation");
 
         expectedException.expect(IllegalStateException.class);
-        expectedException.expectMessage("Invalid Customer provided for creation. Provided object: " + customer);
 
         customerService.createCustomer(customer);
     }
