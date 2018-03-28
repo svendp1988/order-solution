@@ -31,7 +31,8 @@ public class Order extends Entity {
 
     public Price getTotalPrice() {
         return orderItems.stream()
-                .map(OrderItem::getItemPrice)
+                .map(orderItem -> Price.create(orderItem.getItemPrice().getAmount()
+                        .multiply(BigDecimal.valueOf(orderItem.getOrderedAmount()))))
                 .reduce(Price.create(BigDecimal.ZERO),
                         (price1, price2) -> Price.create(price1.getAmount().add(price2.getAmount())));
     }
