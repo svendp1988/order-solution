@@ -32,6 +32,12 @@ public class OrderController {
                         orderMapper.toDomain(orderDto)));
     }
 
+    @PostMapping(path="/{id}/reorder",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public OrderAfterCreationDto reorderOrder(@PathVariable String id) {
+        return orderMapper.toOrderAfterCreationDto(
+                orderService.reorderOrder(UUID.fromString(id)));
+    }
+
     @GetMapping(path ="/customers/{customerId}" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public OrdersReportDto getOrdersForCustomerReport(@PathVariable String customerId) {
         return orderMapper.toOrdersReportDto(

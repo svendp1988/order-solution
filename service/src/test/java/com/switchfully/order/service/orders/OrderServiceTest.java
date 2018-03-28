@@ -6,7 +6,7 @@ import com.switchfully.order.domain.orders.Order;
 import com.switchfully.order.domain.orders.OrderRepository;
 import com.switchfully.order.infrastructure.exceptions.EntityNotFoundException;
 import com.switchfully.order.infrastructure.exceptions.EntityNotValidException;
-import org.assertj.core.api.Assertions;
+import com.switchfully.order.infrastructure.exceptions.NotAuthorizedException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,6 +19,7 @@ import static com.switchfully.order.domain.customers.CustomerTestBuilder.aCustom
 import static com.switchfully.order.domain.items.ItemTestBuilder.anItem;
 import static com.switchfully.order.domain.orders.OrderTestBuilder.anOrder;
 import static com.switchfully.order.domain.orders.orderitems.OrderItemTestBuilder.anOrderItem;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 
 public class OrderServiceTest {
@@ -51,7 +52,7 @@ public class OrderServiceTest {
 
         Order createdOrder = orderService.createOrder(order);
 
-        Assertions.assertThat(createdOrder).isNotNull();
+        assertThat(createdOrder).isNotNull();
     }
 
     @Test
@@ -94,6 +95,43 @@ public class OrderServiceTest {
                 "items exist, the following entity was found to be invalid: " + order.toString());
 
         orderService.createOrder(order);
+    }
+
+    @Test
+    public void reorderOrder() {
+        UUID originalOrderId = UUID.randomUUID();
+        UUID customerId = UUID.randomUUID();
+        UUID itemId = UUID.randomUUID();
+        Mockito.when(orderRepositoryMock.get(originalOrderId))
+                .thenReturn(anOrder()
+                        .withCustomerId(customerId)
+                        .withOrderItems(anOrderItem()
+                                .withItemId(itemId)
+                                .build())
+                        .build());
+        Mockito.when(customerRepositoryMock.get(customerId)).thenReturn(aCustomer().build());
+        Mockito.when(itemRepositoryMock.get(itemId)).thenReturn(anItem().build());
+        Order expectedOrder = anOrder().build();
+        Mockito.when(orderRepositoryMock.save(any(Order.class))).thenReturn(expectedOrder);
+
+        Order orderFromReorder = orderService.reorderOrder(originalOrderId);
+
+        assertThat(orderFromReorder).isEqualTo(expectedOrder);
+    }
+
+    @Test
+    public void reorderOrder_givenAnInvalidCustomer_thenThrowException() {
+        UUID originalOrderId = UUID.randomUUID();
+        UUID customerId = UUID.randomUUID();
+        Mockito.when(orderRepositoryMock.get(originalOrderId))
+                .thenReturn(anOrder().withCustomerId(customerId).build());
+        Mockito.when(customerRepositoryMock.get(customerId)).thenReturn(null);
+
+        expectedException.expect(NotAuthorizedException.class);
+        expectedException.expectMessage("Customer " + customerId.toString() + " is not allowed to reorder the " +
+                "Order " + originalOrderId.toString() + " because he's not the owner of that order!");
+
+        orderService.reorderOrder(originalOrderId);
     }
 
 }

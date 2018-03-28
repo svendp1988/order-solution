@@ -5,12 +5,16 @@ import com.switchfully.order.domain.customers.Customer;
 import com.switchfully.order.domain.customers.CustomerRepository;
 import com.switchfully.order.domain.items.Item;
 import com.switchfully.order.domain.items.ItemRepository;
+import com.switchfully.order.domain.items.prices.Price;
 import com.switchfully.order.domain.orders.Order;
 import com.switchfully.order.domain.orders.OrderRepository;
+import com.switchfully.order.domain.orders.orderitems.OrderItemTestBuilder;
 import org.junit.After;
 import org.junit.Test;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.switchfully.order.domain.customers.CustomerTestBuilder.aCustomer;
@@ -77,6 +81,37 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
         List<Order> ordersForCustomer = orderService.getOrdersForCustomer(existingCustomer2.getId());
 
         assertThat(ordersForCustomer).containsExactlyInAnyOrder(order2, order3);
+    }
+
+    @Test
+    public void reorderOrder() {
+        Customer customerOfOrder = customerRepository.save(aCustomer().build());
+        Item itemFromOrder = itemRepository.save(anItem()
+                .withPrice(Price.create(BigDecimal.valueOf(8.0)))
+                .withAmountOfStock(3)
+                .build());
+        Order originalOrder = orderRepository.save(anOrder()
+                .withCustomerId(customerOfOrder.getId())
+                .withOrderItems(OrderItemTestBuilder.anOrderItem()
+                        .withItemId(itemFromOrder.getId())
+                        .withItemPrice(Price.create(BigDecimal.valueOf(9.95)))
+                        .withOrderedAmount(5)
+                        .withShippingDateBasedOnAvailableItemStock(10)
+                        .build())
+                .build());
+
+
+        Order orderFromReorder = orderService.reorderOrder(originalOrder.getId());
+
+        assertThat(orderFromReorder).isNotNull();
+        assertThat(orderFromReorder.getTotalPrice().sameAs(Price.create(BigDecimal.valueOf(40.0)))).isTrue();
+        assertThat(orderFromReorder.getCustomerId()).isEqualTo(customerOfOrder.getId());
+        assertThat(orderFromReorder.getOrderItems()).hasSize(1);
+        assertThat(orderFromReorder.getOrderItems().get(0).getShippingDate().isAfter(LocalDate.now().plusDays(2)));
+        assertThat(orderFromReorder.getOrderItems().get(0).getOrderedAmount()).isEqualTo(5);
+        assertThat(orderFromReorder.getOrderItems().get(0).getTotalPrice().sameAs(Price.create(BigDecimal.valueOf(40.0)))).isTrue();
+        assertThat(orderFromReorder.getOrderItems().get(0).getItemPrice().sameAs(Price.create(BigDecimal.valueOf(8.0)))).isTrue();
+        assertThat(orderFromReorder.getOrderItems().get(0).getItemId()).isEqualTo(itemFromOrder.getId());
     }
 
 }

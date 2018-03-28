@@ -18,6 +18,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import static com.switchfully.order.domain.customers.CustomerTestBuilder.aCustomer;
 import static com.switchfully.order.domain.items.ItemTestBuilder.anItem;
@@ -75,6 +76,34 @@ public class OrderControllerIntegrationTest extends ControllerIntegrationTest {
         assertThat(orderAfterCreationDto).isNotNull();
         assertThat(orderAfterCreationDto.getOrderId()).isNotNull().isNotEmpty();
         assertThat(orderAfterCreationDto.getTotalPrice()).isEqualTo(92.5f);
+    }
+
+    @Test
+    public void reorderOrder() {
+        Customer customer = customerRepository.save(aCustomer().build());
+        Item itemOne = itemRepository.save(anItem()
+                .withAmountOfStock(10)
+                .withPrice(Price.create(BigDecimal.valueOf(10)))
+                .build());
+        Order order = orderRepository.save(anOrder()
+                .withCustomerId(customer.getId())
+                .withOrderItems(anOrderItem()
+                        .withShippingDateBasedOnAvailableItemStock(itemOne.getAmountOfStock())
+                        .withOrderedAmount(6)
+                        .withItemPrice(itemOne.getPrice())
+                        .withItemId(itemOne.getId())
+                        .build())
+                .build());
+
+        OrderAfterCreationDto orderAfterCreationDto = new TestRestTemplate()
+                .postForObject(format("http://localhost:%s/%s/%s/%s", getPort(), OrderController.RESOURCE_NAME,
+                        order.getId(), "reorder"), null, OrderAfterCreationDto.class);
+
+        assertThat(orderAfterCreationDto).isNotNull();
+        assertThat(orderAfterCreationDto.getOrderId()).isNotNull().isNotEmpty().isNotEqualTo(order.getId());
+        assertThat(orderAfterCreationDto.getTotalPrice()).isEqualTo(60.0f);
+        assertThat(orderRepository.get(UUID.fromString(orderAfterCreationDto.getOrderId()))).isNotNull();
+
     }
 
     @Test
