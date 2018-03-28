@@ -1,11 +1,15 @@
 package com.switchfully.order.api.orders;
 
+import com.switchfully.order.api.customers.addresses.AddressMapper;
+import com.switchfully.order.api.orders.dtos.ItemGroupDto;
 import com.switchfully.order.api.orders.dtos.OrderAfterCreationDto;
 import com.switchfully.order.api.orders.dtos.OrderCreationDto;
+import com.switchfully.order.api.orders.dtos.OrderDto;
 import com.switchfully.order.api.orders.dtos.reports.OrdersReportDto;
 import com.switchfully.order.api.orders.dtos.reports.SingleOrderReportDto;
+import com.switchfully.order.domain.customers.addresses.Address;
 import com.switchfully.order.domain.orders.Order;
-import com.switchfully.order.infrastructure.dto.Mapper;
+import com.switchfully.order.service.customers.CustomerService;
 
 import javax.inject.Named;
 import java.util.List;
@@ -15,20 +19,31 @@ import java.util.stream.Collectors;
 import static com.switchfully.order.domain.orders.Order.OrderBuilder.order;
 
 @Named
-public class OrderMapper extends Mapper<OrderCreationDto, Order> {
+public class OrderMapper {
 
     private OrderItemMapper orderItemMapper;
+    private AddressMapper addressMapper;
+    private CustomerService customerService;
 
-    public OrderMapper(OrderItemMapper orderItemMapper) {
+    public OrderMapper(OrderItemMapper orderItemMapper, AddressMapper addressMapper, CustomerService customerService) {
         this.orderItemMapper = orderItemMapper;
+        this.addressMapper = addressMapper;
+        this.customerService = customerService;
     }
 
-    @Override
-    public OrderCreationDto toDto(Order order) {
-        throw new UnsupportedOperationException("Not yet supported. Will be implemented to view a single Order");
+    public OrderDto toDto(Order order) {
+        return new OrderDto()
+                .withOrderId(order.getId().toString())
+                .withItemGroups(order.getOrderItems().stream()
+                        .map(orderItem -> orderItemMapper.toDto(orderItem))
+                        .toArray(ItemGroupDto[]::new))
+                .withAddress(addressMapper.toDto(getAddressForCustomer(order.getCustomerId())));
     }
 
-    @Override
+    private Address getAddressForCustomer(UUID customerId) {
+        return customerService.getCustomer(customerId).getAddress();
+    }
+
     public Order toDomain(OrderCreationDto orderCreationDto) {
         return order()
                 .withCustomerId(UUID.fromString(orderCreationDto.getCustomerId()))

@@ -13,6 +13,8 @@ import com.switchfully.order.infrastructure.exceptions.NotAuthorizedException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -56,6 +58,29 @@ public class OrderService {
                 .withCustomerId(orderToReorder.getCustomerId())
                 .withOrderItems(copyOrderItemsWithRecentPrice(orderToReorder.getOrderItems()))
                 .build());
+    }
+
+    public List<Order> getAllOrders(boolean onlyIncludeShippableToday) {
+        if (onlyIncludeShippableToday) {
+            return getOrdersOnlyContainingOrderItemsShippingToday();
+        }
+        return new ArrayList<>(orderRepository.getAll().values());
+    }
+
+    private List<Order> getOrdersOnlyContainingOrderItemsShippingToday() {
+        return orderRepository.getAll().values().stream()
+                .map(order -> order()
+                        .withCustomerId(order.getCustomerId())
+                        .withId(order.getId())
+                        .withOrderItems(getOrderItemsShippingToday(order))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    private List<OrderItem> getOrderItemsShippingToday(Order order) {
+        return order.getOrderItems().stream()
+                .filter(orderItem -> orderItem.getShippingDate().isEqual(LocalDate.now()))
+                .collect(Collectors.toList());
     }
 
     private void assertAllOrderedItemsExist(Order order) {

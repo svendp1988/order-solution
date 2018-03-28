@@ -1,13 +1,18 @@
 package com.switchfully.order.api.orders;
 
+import com.switchfully.order.api.customers.addresses.AddressDto;
+import com.switchfully.order.api.customers.addresses.AddressMapper;
 import com.switchfully.order.api.orders.dtos.ItemGroupDto;
 import com.switchfully.order.api.orders.dtos.OrderAfterCreationDto;
 import com.switchfully.order.api.orders.dtos.OrderCreationDto;
+import com.switchfully.order.api.orders.dtos.OrderDto;
 import com.switchfully.order.api.orders.dtos.reports.ItemGroupReportDto;
 import com.switchfully.order.api.orders.dtos.reports.OrdersReportDto;
+import com.switchfully.order.domain.customers.addresses.Address;
 import com.switchfully.order.domain.items.prices.Price;
 import com.switchfully.order.domain.orders.Order;
 import com.switchfully.order.domain.orders.orderitems.OrderItem;
+import com.switchfully.order.service.customers.CustomerService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -15,6 +20,8 @@ import org.mockito.Mockito;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import static com.switchfully.order.domain.customers.CustomerTestBuilder.aCustomer;
+import static com.switchfully.order.domain.customers.addresses.AddressTestBuilder.anAddress;
 import static com.switchfully.order.domain.orders.OrderTestBuilder.anOrder;
 import static com.switchfully.order.domain.orders.orderitems.OrderItemTestBuilder.anOrderItem;
 import static java.util.Arrays.asList;
@@ -26,12 +33,16 @@ import static org.mockito.Mockito.when;
 public class OrderMapperTest {
 
     private OrderItemMapper orderItemMapperMock;
+    private AddressMapper addressMapper;
+    private CustomerService customerService;
     private OrderMapper orderMapper;
 
     @Before
     public void setupService() {
         orderItemMapperMock = Mockito.mock(OrderItemMapper.class);
-        orderMapper = new OrderMapper(orderItemMapperMock);
+        addressMapper = Mockito.mock(AddressMapper.class);
+        customerService = Mockito.mock(CustomerService.class);
+        orderMapper = new OrderMapper(orderItemMapperMock, addressMapper, customerService);
     }
 
     @Test
@@ -52,6 +63,28 @@ public class OrderMapperTest {
         assertThat(order).isNotNull();
         assertThat(order.getCustomerId().toString()).isEqualTo(customerId);
         assertThat(order.getOrderItems()).containsExactlyInAnyOrder(orderItem, orderItem);
+    }
+
+    @Test
+    public void toDto() {
+        UUID customerId = UUID.randomUUID();
+        UUID orderId = UUID.randomUUID();
+        Order order = anOrder().withCustomerId(customerId).withId(orderId).build();
+        Address address = anAddress().build();
+        when(customerService.getCustomer(customerId))
+                .thenReturn(aCustomer()
+                        .withAddress(address)
+                        .build());
+        AddressDto addressDto = new AddressDto().withStreetName("Hellostreet");
+        when(addressMapper.toDto(address)).thenReturn(addressDto);
+
+        OrderDto orderDto = orderMapper.toDto(order);
+
+        assertThat(orderDto).isNotNull();
+        assertThat(orderDto.getOrderId()).isEqualTo(orderId.toString());
+        assertThat(orderDto.getAddress()).isEqualToComparingFieldByField(addressDto);
+        assertThat(orderDto.getItemGroups()).isNotEmpty();
+
     }
 
     @Test
@@ -99,7 +132,7 @@ public class OrderMapperTest {
         assertThat(ordersReportDto).isNotNull();
         assertThat(ordersReportDto.getTotalPriceOfAllOrders())
                 .isEqualTo(Price.add(orderItem3.getTotalPrice(),
-                        Price.add(orderItem1.getTotalPrice(),orderItem2.getTotalPrice()))
+                        Price.add(orderItem1.getTotalPrice(), orderItem2.getTotalPrice()))
                         .getAmountAsFloat());
         assertThat(ordersReportDto.getOrders()).hasSize(2);
     }

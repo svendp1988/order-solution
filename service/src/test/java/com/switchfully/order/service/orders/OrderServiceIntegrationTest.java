@@ -8,7 +8,6 @@ import com.switchfully.order.domain.items.ItemRepository;
 import com.switchfully.order.domain.items.prices.Price;
 import com.switchfully.order.domain.orders.Order;
 import com.switchfully.order.domain.orders.OrderRepository;
-import com.switchfully.order.domain.orders.orderitems.OrderItemTestBuilder;
 import org.junit.After;
 import org.junit.Test;
 
@@ -66,6 +65,30 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    public void getAllOrders() {
+        Item item = itemRepository.save(anItem().build());
+        Order order1 = orderRepository.save(anOrder().withOrderItems(anOrderItem().withItemId(item.getId()).build()).build());
+        Order order2 = orderRepository.save(anOrder().withOrderItems(anOrderItem().withItemId(item.getId()).build()).build());
+        Order order3 = orderRepository.save(anOrder().withOrderItems(anOrderItem().withItemId(item.getId()).build()).build());
+
+        List<Order> allOrders = orderService.getAllOrders(false);
+
+        assertThat(allOrders).containsExactlyInAnyOrder(order1, order2, order3);
+    }
+
+    @Test
+    public void getAllOrders_onlyIncludeShippableToday() {
+        Item item = itemRepository.save(anItem().build());
+        Order order1 = orderRepository.save(anOrder().withOrderItems(anOrderItem().withItemId(item.getId()).build()).build());
+
+        List<Order> allOrders = orderService.getAllOrders(true);
+
+        assertThat(allOrders).hasSize(1);
+        assertThat(allOrders.get(0)).isEqualToIgnoringGivenFields(order1, "orderItems");
+        assertThat(allOrders.get(0).getOrderItems()).isEmpty();
+    }
+
+    @Test
     public void getOrdersForCustomer(){
         Customer existingCustomer1 = customerRepository.save(aCustomer().build());
         Customer existingCustomer2 = customerRepository.save(aCustomer().build());
@@ -96,7 +119,7 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
                 .build());
         Order originalOrder = orderRepository.save(anOrder()
                 .withCustomerId(customerOfOrder.getId())
-                .withOrderItems(OrderItemTestBuilder.anOrderItem()
+                .withOrderItems(anOrderItem()
                         .withItemId(itemFromOrder.getId())
                         .withItemPrice(Price.create(BigDecimal.valueOf(9.95)))
                         .withOrderedAmount(5)

@@ -4,6 +4,7 @@ import com.switchfully.order.ControllerIntegrationTest;
 import com.switchfully.order.api.orders.dtos.ItemGroupDto;
 import com.switchfully.order.api.orders.dtos.OrderAfterCreationDto;
 import com.switchfully.order.api.orders.dtos.OrderCreationDto;
+import com.switchfully.order.api.orders.dtos.OrderDto;
 import com.switchfully.order.api.orders.dtos.reports.OrdersReportDto;
 import com.switchfully.order.domain.customers.Customer;
 import com.switchfully.order.domain.customers.CustomerRepository;
@@ -79,6 +80,28 @@ public class OrderControllerIntegrationTest extends ControllerIntegrationTest {
     }
 
     @Test
+    public void getAllOrders_includeOnlyShippableToday() {
+        Customer existingCustomer1 = customerRepository.save(aCustomer().build());
+        Item existingItem1 = itemRepository.save(anItem().build());
+        Item existingItem2 = itemRepository.save(anItem().build());
+        orderRepository.save(anOrder()
+                .withOrderItems(anOrderItem().withItemId(existingItem1.getId()).build(),
+                        anOrderItem().withItemId(existingItem2.getId()).build())
+                .withCustomerId(existingCustomer1.getId()).build());
+        orderRepository.save(anOrder()
+                .withOrderItems(anOrderItem().withItemId(existingItem2.getId()).build())
+                .withCustomerId(existingCustomer1.getId()).build());
+
+        OrderDto[] orders = new TestRestTemplate()
+                .getForObject(format("http://localhost:%s/%s?shippableToday=true", getPort(),
+                        OrderController.RESOURCE_NAME), OrderDto[].class);
+
+        assertThat(orders).hasSize(2);
+        assertThat(orders[0].getItemGroups()).isEmpty();
+        assertThat(orders[1].getItemGroups()).isEmpty();
+    }
+
+    @Test
     public void reorderOrder() {
         Customer customer = customerRepository.save(aCustomer().build());
         Item itemOne = itemRepository.save(anItem()
@@ -131,9 +154,6 @@ public class OrderControllerIntegrationTest extends ControllerIntegrationTest {
                     assertThat(order.getOrderId()).isNotEmpty().isNotNull();
                     assertThat(order.getItemGroups()).isNotEmpty();
                 });
-
-
-
     }
 
 }
