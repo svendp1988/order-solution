@@ -4,6 +4,7 @@ import com.switchfully.order.domain.orders.Order.OrderBuilder;
 import com.switchfully.order.domain.orders.orderitems.OrderItem;
 import com.switchfully.order.infrastructure.builder.Builder;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import static com.switchfully.order.domain.orders.orderitems.OrderItemTestBuilder.anOrderItem;
@@ -23,7 +24,7 @@ public class OrderTestBuilder extends Builder<Order> {
     public static OrderTestBuilder anOrder() {
         return new OrderTestBuilder(OrderBuilder.order()
         .withCustomerId(UUID.randomUUID())
-        .withOrderItems(anOrderItem().build(), anOrderItem().build()));
+        .withOrderItems(Arrays.asList(anOrderItem().build(), anOrderItem().build())));
     }
 
     @Override
@@ -37,7 +38,7 @@ public class OrderTestBuilder extends Builder<Order> {
     }
 
     public OrderTestBuilder withOrderItems(OrderItem... orderItems) {
-        orderBuilder.withOrderItems(orderItems);
+        orderBuilder.withOrderItems(Arrays.asList(orderItems));
         return this;
     }
 

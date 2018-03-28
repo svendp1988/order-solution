@@ -6,7 +6,6 @@ import com.switchfully.order.domain.orders.orderitems.OrderItem;
 import com.switchfully.order.infrastructure.builder.Builder;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -69,8 +68,8 @@ public class Order extends Entity {
             return this;
         }
 
-        public OrderBuilder withOrderItems(OrderItem... orderItems) {
-            this.orderItems = Arrays.asList(orderItems);
+        public OrderBuilder withOrderItems(List<OrderItem> orderItems) {
+            this.orderItems = orderItems;
             return this;
         }
 
