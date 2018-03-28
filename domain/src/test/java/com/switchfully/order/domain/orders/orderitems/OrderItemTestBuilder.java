@@ -5,7 +5,6 @@ import com.switchfully.order.domain.orders.orderitems.OrderItem.OrderItemBuilder
 import com.switchfully.order.infrastructure.builder.Builder;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.UUID;
 
 public class OrderItemTestBuilder extends Builder<OrderItem>{
@@ -25,7 +24,7 @@ public class OrderItemTestBuilder extends Builder<OrderItem>{
             .withItemId(UUID.randomUUID())
             .withItemPrice(Price.create(BigDecimal.valueOf(49.95)))
             .withOrderedAmount(10)
-            .withShippingDate(LocalDate.of(2018, 10, 20))
+            .withShippingDateBasedOnAvailableItemStock(15)
         );
     }
 
@@ -49,8 +48,8 @@ public class OrderItemTestBuilder extends Builder<OrderItem>{
         return this;
     }
 
-    public OrderItemTestBuilder withShippingDate(LocalDate shippingDate) {
-        orderItemBuilder.withShippingDate(shippingDate);
+    public OrderItemTestBuilder withShippingDateBasedOnAvailableItemStock(int availableItemStock) {
+        orderItemBuilder.withShippingDateBasedOnAvailableItemStock(availableItemStock);
         return this;
     }
 }

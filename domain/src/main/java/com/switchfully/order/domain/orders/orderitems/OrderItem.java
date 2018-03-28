@@ -3,7 +3,9 @@ package com.switchfully.order.domain.orders.orderitems;
 import com.switchfully.order.domain.items.prices.Price;
 import com.switchfully.order.infrastructure.builder.Builder;
 
+import java.time.Clock;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.UUID;
 
 /**
@@ -17,11 +19,17 @@ public final class OrderItem {
     private final int orderedAmount;
     private final LocalDate shippingDate;
 
-    public OrderItem(OrderItemBuilder orderItemBuilder) {
+    public OrderItem(OrderItemBuilder orderItemBuilder, Clock clock) {
         itemId = orderItemBuilder.itemId;
         itemPrice = orderItemBuilder.itemPrice;
         orderedAmount = orderItemBuilder.orderedAmount;
-        shippingDate = orderItemBuilder.shippingDate;
+        shippingDate = calculateShippingDate(orderItemBuilder.availableItemStock, clock);
+    }
+
+    private LocalDate calculateShippingDate(int availableItemStock, Clock clock) {
+        if(availableItemStock - orderedAmount >= 0) {
+            return LocalDate.now(clock).plusDays(1);
+        } return LocalDate.now(clock).plusDays(7);
     }
 
     public UUID getItemId() {
@@ -54,7 +62,7 @@ public final class OrderItem {
         private UUID itemId;
         private Price itemPrice;
         private int orderedAmount;
-        private LocalDate shippingDate;
+        private int availableItemStock;
 
         private OrderItemBuilder() {
         }
@@ -65,7 +73,7 @@ public final class OrderItem {
 
         @Override
         public OrderItem build() {
-            return new OrderItem(this);
+            return new OrderItem(this, Clock.system(ZoneId.systemDefault()));
         }
 
         public OrderItemBuilder withItemId(UUID itemId) {
@@ -83,8 +91,8 @@ public final class OrderItem {
             return this;
         }
 
-        public OrderItemBuilder withShippingDate(LocalDate shippingDate) {
-            this.shippingDate = shippingDate;
+        public OrderItemBuilder withShippingDateBasedOnAvailableItemStock(int availableItemStock) {
+            this.availableItemStock = availableItemStock;
             return this;
         }
     }
