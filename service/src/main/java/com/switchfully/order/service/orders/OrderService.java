@@ -12,6 +12,7 @@ import com.switchfully.order.infrastructure.exceptions.EntityNotValidException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
+import java.util.UUID;
 
 @Named
 public class OrderService {
@@ -37,6 +38,10 @@ public class OrderService {
         assertOrderingCustomerExists(order);
         assertAllOrderedItemsExist(order);
         return orderRepository.save(order);
+    }
+
+    public List<Order> getOrdersForCustomer(UUID customerId) {
+        return orderRepository.getOrdersForCustomer(customerId);
     }
 
     private void assertAllOrderedItemsExist(Order order) {
@@ -70,6 +75,4 @@ public class OrderService {
             orderValidator.throwInvalidStateException(order, "creation");
         }
     }
-
-
 }

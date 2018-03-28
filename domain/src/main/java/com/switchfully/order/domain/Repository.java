@@ -11,6 +11,10 @@ public abstract class Repository<T extends Entity, U extends EntityDatabase<T>> 
         this.database = database;
     }
 
+    protected U getDatabase() {
+        return database;
+    }
+
     public T save(T entity) {
         entity.generateId();
         database.save(entity);

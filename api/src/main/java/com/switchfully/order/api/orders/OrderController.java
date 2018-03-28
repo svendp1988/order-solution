@@ -1,15 +1,14 @@
 package com.switchfully.order.api.orders;
 
 import com.switchfully.order.api.orders.dtos.OrderAfterCreationDto;
-import com.switchfully.order.api.orders.dtos.OrderDto;
+import com.switchfully.order.api.orders.dtos.OrderCreationDto;
+import com.switchfully.order.api.orders.dtos.reports.OrdersReportDto;
 import com.switchfully.order.service.orders.OrderService;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/" + OrderController.RESOURCE_NAME)
@@ -27,10 +26,16 @@ public class OrderController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public OrderAfterCreationDto createOrder(@RequestBody OrderDto orderDto) {
+    public OrderAfterCreationDto createOrder(@RequestBody OrderCreationDto orderDto) {
         return orderMapper.toOrderAfterCreationDto(
                 orderService.createOrder(
                         orderMapper.toDomain(orderDto)));
+    }
+
+    @GetMapping(path ="/customers/{customerId}" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public OrdersReportDto getOrdersForCustomerReport(@PathVariable String customerId) {
+        return orderMapper.toOrdersReportDto(
+                orderService.getOrdersForCustomer(UUID.fromString(customerId)));
     }
 
 }

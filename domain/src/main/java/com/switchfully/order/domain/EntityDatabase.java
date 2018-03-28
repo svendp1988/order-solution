@@ -19,7 +19,7 @@ public abstract class EntityDatabase<T extends Entity> {
                 .collect(Collectors.toMap(Entity::getId, entity -> entity));
     }
 
-    Map<UUID, T> getAll() {
+    public Map<UUID, T> getAll() {
         return Collections.unmodifiableMap(entities);
     }
 

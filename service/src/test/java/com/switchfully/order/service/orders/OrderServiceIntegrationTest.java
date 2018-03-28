@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Test;
 
 import javax.inject.Inject;
+import java.util.List;
 
 import static com.switchfully.order.domain.customers.CustomerTestBuilder.aCustomer;
 import static com.switchfully.order.domain.items.ItemTestBuilder.anItem;
@@ -54,6 +55,28 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
 
         assertThat(createdOrder.getId()).isNotNull();
         assertThat(createdOrder).isEqualToComparingFieldByFieldRecursively(orderToCreate);
+    }
+
+    @Test
+    public void getOrdersForCustomer(){
+        Customer existingCustomer1 = customerRepository.save(aCustomer().build());
+        Customer existingCustomer2 = customerRepository.save(aCustomer().build());
+        Item existingItem1 = itemRepository.save(anItem().build());
+        Item existingItem2 = itemRepository.save(anItem().build());
+        Order order1 = orderRepository.save(anOrder()
+                .withOrderItems(anOrderItem().withItemId(existingItem1.getId()).build(),
+                        anOrderItem().withItemId(existingItem2.getId()).build())
+                .withCustomerId(existingCustomer1.getId()).build());
+        Order order2 = orderRepository.save(anOrder()
+                .withOrderItems(anOrderItem().withItemId(existingItem2.getId()).build())
+                .withCustomerId(existingCustomer2.getId()).build());
+        Order order3 = orderRepository.save(anOrder()
+                .withOrderItems(anOrderItem().withItemId(existingItem1.getId()).build())
+                .withCustomerId(existingCustomer2.getId()).build());
+
+        List<Order> ordersForCustomer = orderService.getOrdersForCustomer(existingCustomer2.getId());
+
+        assertThat(ordersForCustomer).containsExactlyInAnyOrder(order2, order3);
     }
 
 }
