@@ -5,6 +5,7 @@ import com.switchfully.order.domain.items.ItemRepository;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.UUID;
 
 @Named
 public class ItemService {
@@ -30,5 +31,9 @@ public class ItemService {
             itemValidator.throwInvalidStateException(item, "updating");
         }
         return itemRepository.update(item);
+    }
+
+    public Item getItem(UUID itemId) {
+        return itemRepository.get(itemId);
     }
 }

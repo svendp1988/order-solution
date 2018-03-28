@@ -2,7 +2,9 @@ package com.switchfully.order.service.items;
 
 import com.switchfully.order.IntegrationTest;
 import com.switchfully.order.domain.items.Item;
+import com.switchfully.order.domain.items.ItemRepository;
 import com.switchfully.order.domain.items.prices.Price;
+import org.junit.After;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -15,6 +17,13 @@ public class ItemServiceIntegrationTest extends IntegrationTest {
 
     @Inject
     private ItemService itemService;
+
+    @Inject private ItemRepository itemRepository;
+
+    @After
+    public void resetDatabase() {
+        itemRepository.reset();
+    }
 
     @Test
     public void createItem() {
@@ -31,7 +40,17 @@ public class ItemServiceIntegrationTest extends IntegrationTest {
         assertThat(createdItem.getDescription()).isEqualTo("A cool book written by a software engineer");
         assertThat(createdItem.getAmountOfStock()).isEqualTo(239);
         assertThat(createdItem.getPrice().getAmount()).isEqualTo(BigDecimal.valueOf(10.90));
+    }
 
+    @Test
+    public void getItem() {
+        Item createdItem = itemService.createItem(anItem().build());
+
+        Item itemFromDb = itemService.getItem(createdItem.getId());
+
+        assertThat(itemFromDb)
+                .isNotNull()
+                .isEqualTo(itemFromDb);
     }
 
 }
