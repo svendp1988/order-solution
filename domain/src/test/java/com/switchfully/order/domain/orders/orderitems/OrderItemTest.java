@@ -1,7 +1,9 @@
 package com.switchfully.order.domain.orders.orderitems;
 
+import com.switchfully.order.domain.items.prices.Price;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -32,6 +34,20 @@ public class OrderItemTest {
                 fixedClock);
 
         assertThat(orderItem.getShippingDate()).isEqualTo(LocalDate.now(fixedClock).plusDays(7));
+    }
+
+    @Test
+    public void getTotalPrice() {
+        OrderItem orderItem = orderItem()
+                .withItemPrice(Price.create(BigDecimal.valueOf(15)))
+                .withOrderedAmount(3)
+                .build();
+
+        Price totalPrice = orderItem.getTotalPrice();
+
+        assertThat(totalPrice.getAmount()
+                .equals(BigDecimal.valueOf(15).multiply(BigDecimal.valueOf(3))))
+                .isTrue();
     }
 
 }

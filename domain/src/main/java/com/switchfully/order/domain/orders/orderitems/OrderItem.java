@@ -3,6 +3,7 @@ package com.switchfully.order.domain.orders.orderitems;
 import com.switchfully.order.domain.items.prices.Price;
 import com.switchfully.order.infrastructure.builder.Builder;
 
+import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -46,6 +47,11 @@ public final class OrderItem {
 
     public LocalDate getShippingDate() {
         return shippingDate;
+    }
+
+    public Price getTotalPrice() {
+        return Price.create(itemPrice.getAmount()
+                .multiply(BigDecimal.valueOf(orderedAmount)));
     }
 
     @Override
