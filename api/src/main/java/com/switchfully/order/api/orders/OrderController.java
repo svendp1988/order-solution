@@ -29,7 +29,7 @@ public class OrderController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<OrderDto> getAllOrders(@RequestParam(name = "shippableToday") boolean onlyIncludeShippableToday) {
+    public List<OrderDto> getAllOrders(@RequestParam(name = "shippableToday", required = false) boolean onlyIncludeShippableToday) {
         return orderService.getAllOrders(onlyIncludeShippableToday).stream()
                 .map(order -> orderMapper.toDto(order))
                 .collect(Collectors.toList());
