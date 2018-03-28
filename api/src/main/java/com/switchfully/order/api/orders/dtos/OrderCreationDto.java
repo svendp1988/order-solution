@@ -3,20 +3,20 @@ package com.switchfully.order.api.orders.dtos;
 import java.util.Arrays;
 import java.util.List;
 
-public class OrderDto {
+public class OrderCreationDto {
 
     private List<ItemGroupDto> itemGroups;
     private String customerId;
 
-    public OrderDto() {
+    public OrderCreationDto() {
     }
 
-    public OrderDto withItemGroups(ItemGroupDto... itemGroups) {
+    public OrderCreationDto withItemGroups(ItemGroupDto... itemGroups) {
         this.itemGroups = Arrays.asList(itemGroups);
         return this;
     }
 
-    public OrderDto withCustomerId(String customerId) {
+    public OrderCreationDto withCustomerId(String customerId) {
         this.customerId = customerId;
         return this;
     }

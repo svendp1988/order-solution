@@ -1,6 +1,7 @@
 package com.switchfully.order.api.orders;
 
 import com.switchfully.order.api.orders.dtos.ItemGroupDto;
+import com.switchfully.order.api.orders.dtos.reports.ItemGroupReportDto;
 import com.switchfully.order.domain.items.prices.Price;
 import com.switchfully.order.domain.orders.orderitems.OrderItem;
 import com.switchfully.order.infrastructure.exceptions.EntityNotFoundException;
@@ -83,6 +84,29 @@ public class OrderItemMapperTest {
                 new ItemGroupDto()
                         .withItemId(itemId.toString())
                         .withOrderedAmount(2));
+    }
+
+    @Test
+    public void toItemGroupReportDto() {
+        UUID itemId = UUID.randomUUID();
+        when(itemServiceMock.getItem(itemId)).thenReturn(anItem()
+                .withName("iPot")
+                .build());
+
+        ItemGroupReportDto itemGroupReportDto = orderItemMapper.toItemGroupReportDto(anOrderItem()
+                .withOrderedAmount(10)
+                .withShippingDateBasedOnAvailableItemStock(20)
+                .withItemId(itemId)
+                .withItemPrice(Price.create(BigDecimal.valueOf(45.50)))
+                .build());
+
+        assertThat(itemGroupReportDto).isNotNull();
+        assertThat(itemGroupReportDto.getItemId()).isEqualTo(itemId.toString());
+        assertThat(itemGroupReportDto.getName()).isEqualTo("iPot");
+        assertThat(itemGroupReportDto.getOrderedAmount()).isEqualTo(10);
+        assertThat(itemGroupReportDto.getTotalPrice())
+                .isEqualTo(BigDecimal.valueOf(45.50).multiply(BigDecimal.valueOf(10)).floatValue());
+
     }
 
 }
