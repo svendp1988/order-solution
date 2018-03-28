@@ -5,6 +5,8 @@ import com.switchfully.order.domain.items.ItemRepository;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Named
@@ -41,5 +43,9 @@ public class ItemService {
         Item item = itemRepository.get(itemId);
         item.decrementStock(amountToDecrement);
         itemRepository.update(item);
+    }
+
+    public List<Item> getAllItems() {
+        return new ArrayList<>(itemRepository.getAll().values());
     }
 }

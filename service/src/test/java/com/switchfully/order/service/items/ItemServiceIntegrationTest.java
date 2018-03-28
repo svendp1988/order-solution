@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.List;
 
 import static com.switchfully.order.domain.items.ItemTestBuilder.anItem;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,6 +52,16 @@ public class ItemServiceIntegrationTest extends IntegrationTest {
         assertThat(itemFromDb)
                 .isNotNull()
                 .isEqualTo(itemFromDb);
+    }
+
+    @Test
+    public void getAllItems() {
+        Item createdItem1 = itemService.createItem(anItem().build());
+        Item createdItem2 = itemService.createItem(anItem().build());
+
+        List<Item> allItems = itemService.getAllItems();
+
+        assertThat(allItems).containsExactlyInAnyOrder(createdItem1, createdItem2);
     }
 
 }

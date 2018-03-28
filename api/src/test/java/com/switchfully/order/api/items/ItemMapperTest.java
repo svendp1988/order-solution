@@ -32,7 +32,8 @@ public class ItemMapperTest {
                         .withName("Half-Life 3")
                         .withDescription("Boehoehoehoeeeee")
                         .withPrice(49.50f)
-                        .withAmountOfStock(50520));
+                        .withAmountOfStock(50520)
+                        .withStockUrgency(item.getStockUrgency().name()));
     }
 
     @Test

@@ -37,6 +37,12 @@ public class Item extends Entity {
         return amountOfStock;
     }
 
+    public StockUrgency getStockUrgency() {
+        if(amountOfStock < 5) { return StockUrgency.STOCK_LOW; }
+        if (amountOfStock < 10) { return StockUrgency.STOCK_MEDIUM; }
+        return StockUrgency.STOCK_HIGH;
+    }
+
     @Override
     public String toString() {
         return "Item{" +
@@ -97,5 +103,11 @@ public class Item extends Entity {
             this.amountOfStock = amountOfStock;
             return this;
         }
+    }
+
+    public enum StockUrgency {
+        STOCK_LOW,
+        STOCK_MEDIUM,
+        STOCK_HIGH;
     }
 }

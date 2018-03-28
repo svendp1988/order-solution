@@ -30,7 +30,30 @@ public class ItemTest {
         expectedException.expectMessage("Decrementing the stock amount of an item " + itemId.toString() + " below 0 is not allowed");
 
         item.decrementStock(8);
+    }
 
+    @Test
+    public void getStockUrgency_givenAmountOfStockLowerThan5_thenLowStockUrgency() {
+        Item item = anItem().withAmountOfStock(4).build();
+        assertThat(item.getStockUrgency()).isEqualTo(Item.StockUrgency.STOCK_LOW);
+    }
+
+    @Test
+    public void getStockUrgency_givenAmountOfStockLowerThan10_thenMediumStockUrgency() {
+        Item item = anItem().withAmountOfStock(7).build();
+        assertThat(item.getStockUrgency()).isEqualTo(Item.StockUrgency.STOCK_MEDIUM);
+    }
+
+    @Test
+    public void getStockUrgency_givenAmountOfStockEqualTo10_thenHighStockUrgency() {
+        Item item = anItem().withAmountOfStock(10).build();
+        assertThat(item.getStockUrgency()).isEqualTo(Item.StockUrgency.STOCK_HIGH);
+    }
+
+    @Test
+    public void getStockUrgency_givenAmountOfStockHigherThan10_thenHighStockUrgency() {
+        Item item = anItem().withAmountOfStock(11).build();
+        assertThat(item.getStockUrgency()).isEqualTo(Item.StockUrgency.STOCK_HIGH);
     }
 
 

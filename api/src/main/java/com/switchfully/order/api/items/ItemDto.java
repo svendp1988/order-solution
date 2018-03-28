@@ -9,6 +9,7 @@ public class ItemDto {
     private String description;
     private float price;
     private int amountOfStock;
+    private String stockUrgency;
 
     public ItemDto() {
     }
@@ -38,6 +39,11 @@ public class ItemDto {
         return this;
     }
 
+    public ItemDto withStockUrgency(String stockUrgency) {
+        this.stockUrgency = stockUrgency;
+        return this;
+    }
+
     public String getId() {
         return id;
     }
@@ -56,5 +62,9 @@ public class ItemDto {
 
     public int getAmountOfStock() {
         return amountOfStock;
+    }
+
+    public String getStockUrgency() {
+        return stockUrgency;
     }
 }
