@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,7 @@ public class OrderRepositoryTest {
     @Before
     public void setupRepository() {
         orderDatabaseMock = Mockito.mock(OrderDatabase.class);
-        orderRepository = new OrderRepository(orderDatabaseMock);
+        orderRepository = new OrderRepository(orderDatabaseMock, Mockito.mock(ApplicationEventPublisher.class));
     }
 
     @Test

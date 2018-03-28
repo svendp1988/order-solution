@@ -48,6 +48,14 @@ public class Item extends Entity {
                 '}';
     }
 
+    public void decrementStock(int amountToDecrement) {
+        if(amountToDecrement > amountOfStock) {
+            throw new IllegalArgumentException("Decrementing the stock amount of an item " + getId().toString()
+                    + " below 0 is not allowed");
+        }
+        amountOfStock -= amountToDecrement;
+    }
+
     public static class ItemBuilder extends Builder<Item> {
 
         private UUID id;

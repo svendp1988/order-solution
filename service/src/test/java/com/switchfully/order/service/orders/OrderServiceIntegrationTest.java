@@ -46,12 +46,15 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
 
     @Test
     public void createOrder() {
-        Item existingItem = itemRepository.save(anItem().build());
+        Item existingItem = itemRepository.save(anItem()
+                .withAmountOfStock(20)
+                .build());
         Customer existingCustomer = customerRepository.save(aCustomer().build());
         Order orderToCreate = anOrder()
                 .withCustomerId(existingCustomer.getId())
                 .withOrderItems(anOrderItem()
                         .withItemId(existingItem.getId())
+                        .withOrderedAmount(15)
                         .build())
                 .build();
 
@@ -59,6 +62,7 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
 
         assertThat(createdOrder.getId()).isNotNull();
         assertThat(createdOrder).isEqualToComparingFieldByFieldRecursively(orderToCreate);
+        assertThat(itemRepository.get(existingItem.getId()).getAmountOfStock()).isEqualTo(5);
     }
 
     @Test
@@ -88,7 +92,7 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
         Customer customerOfOrder = customerRepository.save(aCustomer().build());
         Item itemFromOrder = itemRepository.save(anItem()
                 .withPrice(Price.create(BigDecimal.valueOf(8.0)))
-                .withAmountOfStock(3)
+                .withAmountOfStock(12)
                 .build());
         Order originalOrder = orderRepository.save(anOrder()
                 .withCustomerId(customerOfOrder.getId())
@@ -99,7 +103,6 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
                         .withShippingDateBasedOnAvailableItemStock(10)
                         .build())
                 .build());
-
 
         Order orderFromReorder = orderService.reorderOrder(originalOrder.getId());
 
@@ -112,6 +115,7 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
         assertThat(orderFromReorder.getOrderItems().get(0).getTotalPrice().sameAs(Price.create(BigDecimal.valueOf(40.0)))).isTrue();
         assertThat(orderFromReorder.getOrderItems().get(0).getItemPrice().sameAs(Price.create(BigDecimal.valueOf(8.0)))).isTrue();
         assertThat(orderFromReorder.getOrderItems().get(0).getItemId()).isEqualTo(itemFromOrder.getId());
+        assertThat(itemRepository.get(itemFromOrder.getId()).getAmountOfStock()).isEqualTo(2);
     }
 
 }

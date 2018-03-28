@@ -36,4 +36,10 @@ public class ItemService {
     public Item getItem(UUID itemId) {
         return itemRepository.get(itemId);
     }
+
+    public void decrementStockForItem(UUID itemId, int amountToDecrement) {
+        Item item = itemRepository.get(itemId);
+        item.decrementStock(amountToDecrement);
+        itemRepository.update(item);
+    }
 }

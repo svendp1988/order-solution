@@ -53,7 +53,7 @@ public class OrderControllerIntegrationTest extends ControllerIntegrationTest {
                 .withPrice(Price.create(BigDecimal.valueOf(10)))
                 .build());
         Item itemTwo = itemRepository.save(anItem()
-                .withAmountOfStock(4)
+                .withAmountOfStock(7)
                 .withPrice(Price.create(BigDecimal.valueOf(2.5)))
                 .build());
 
@@ -82,7 +82,7 @@ public class OrderControllerIntegrationTest extends ControllerIntegrationTest {
     public void reorderOrder() {
         Customer customer = customerRepository.save(aCustomer().build());
         Item itemOne = itemRepository.save(anItem()
-                .withAmountOfStock(10)
+                .withAmountOfStock(12)
                 .withPrice(Price.create(BigDecimal.valueOf(10)))
                 .build());
         Order order = orderRepository.save(anOrder()

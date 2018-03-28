@@ -21,6 +21,8 @@ www.switchfully.com
         - Jenkins requires the Pipeline plugin
         - Jenkins requires the Build Monitor View
         - Jenkins runs as a service (task manager) on Windows
+    - Event Publishing with Spring (!)
+        - (to update the stock of an item when an order is created in a very decoupled way)
 
 ## Usage
 
