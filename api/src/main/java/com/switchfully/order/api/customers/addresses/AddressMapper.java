@@ -1,6 +1,7 @@
 package com.switchfully.order.api.customers.addresses;
 
 import com.switchfully.order.domain.customers.addresses.Address;
+import com.switchfully.order.domain.customers.addresses.Address.AddressBuilder;
 import com.switchfully.order.infrastructure.dto.Mapper;
 
 import javax.inject.Named;
@@ -19,7 +20,7 @@ public class AddressMapper extends Mapper<AddressDto, Address> {
 
     @Override
     public Address toDomain(AddressDto addressDto) {
-        return Address.AddressBuilder.address()
+        return AddressBuilder.address()
                 .withStreetName(addressDto.getStreetName())
                 .withHouseNumber(addressDto.getHouseNumber())
                 .withPostalCode(addressDto.getPostalCode())

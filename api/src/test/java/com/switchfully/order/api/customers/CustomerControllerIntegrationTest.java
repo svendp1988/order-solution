@@ -4,12 +4,14 @@ import com.switchfully.order.ControllerIntegrationTest;
 import com.switchfully.order.api.customers.addresses.AddressDto;
 import com.switchfully.order.api.customers.emails.EmailDto;
 import com.switchfully.order.api.customers.phonenumbers.PhoneNumberDto;
+import com.switchfully.order.api.interceptors.ControllerExceptionHandler;
 import com.switchfully.order.domain.customers.Customer;
 import com.switchfully.order.domain.customers.CustomerRepository;
 import com.switchfully.order.domain.customers.CustomerTestBuilder;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
 
 import javax.inject.Inject;
 
@@ -51,6 +53,34 @@ public class CustomerControllerIntegrationTest extends ControllerIntegrationTest
                 .postForObject(format("http://localhost:%s/%s", getPort(), CustomerController.RESOURCE_NAME), customerToCreate, CustomerDto.class);
 
         assertCustomerIsEqualIgnoringId(customerToCreate, createdCustomer);
+    }
+
+    @Test
+    public void createCustomer_givenCustomerNotValidForCreationBecauseOfMissingFirstName_thenErrorObjectReturnedByControllerExceptionHandler() {
+        CustomerDto customerToCreate = new CustomerDto()
+                .withFirstname(null)
+                .withLastname("Wayne")
+                .withEmail(new EmailDto()
+                        .withLocalPart("brucy")
+                        .withDomain("bat.net")
+                        .withComplete("brucy@bat.net"))
+                .withPhoneNumber(new PhoneNumberDto()
+                        .withNumber("485212121")
+                        .withCountryCallingCode("+32"))
+                .withAddress(new AddressDto()
+                        .withStreetName("Secretstreet")
+                        .withHouseNumber("841")
+                        .withPostalCode("1238")
+                        .withCountry("GothamCountry"));
+
+        ControllerExceptionHandler.Error error = new TestRestTemplate()
+                .postForObject(format("http://localhost:%s/%s", getPort(), CustomerController.RESOURCE_NAME), customerToCreate, ControllerExceptionHandler.Error.class);
+
+        assertThat(error).isNotNull();
+        assertThat(error.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(error.getUniqueErrorId()).isNotNull().isNotEmpty();
+        assertThat(error.getMessage()).contains("Invalid Customer provided for creation. " +
+                "Provided object: Customer{id=");
     }
 
     @Test
