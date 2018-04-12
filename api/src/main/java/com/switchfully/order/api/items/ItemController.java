@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,11 +33,11 @@ public class ItemController {
                         itemMapper.toDomain(itemDto)));
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ItemDto updateItem(@RequestBody ItemDto itemDto) {
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ItemDto updateItem(@PathVariable String id, @RequestBody ItemDto itemDto) {
         return itemMapper.toDto(
                 itemService.updateItem(
-                        itemMapper.toDomain(itemDto)));
+                        itemMapper.toDomain(UUID.fromString(id), itemDto)));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

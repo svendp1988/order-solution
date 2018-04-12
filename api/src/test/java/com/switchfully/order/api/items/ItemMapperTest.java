@@ -2,7 +2,9 @@ package com.switchfully.order.api.items;
 
 import com.switchfully.order.domain.items.Item;
 import com.switchfully.order.domain.items.prices.Price;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.internal.util.reflection.Whitebox;
 
 import java.math.BigDecimal;
@@ -12,6 +14,9 @@ import static com.switchfully.order.domain.items.Item.ItemBuilder.item;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ItemMapperTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void toDto() {
@@ -34,6 +39,41 @@ public class ItemMapperTest {
                         .withPrice(49.50f)
                         .withAmountOfStock(50520)
                         .withStockUrgency(item.getStockUrgency().name()));
+    }
+
+    @Test
+    public void toDomainWithId() {
+        UUID itemId = UUID.randomUUID();
+
+        Item item = new ItemMapper().toDomain(itemId, new ItemDto()
+                .withId(itemId)
+                .withName("Half-Life 3")
+                .withDescription("Boehoehoe")
+                .withPrice(45f)
+                .withAmountOfStock(50520));
+
+        assertThat(item)
+                .isEqualToComparingFieldByFieldRecursively(item()
+                        .withId(itemId)
+                        .withName("Half-Life 3")
+                        .withDescription("Boehoehoe")
+                        .withPrice(Price.create(BigDecimal.valueOf(45.0)))
+                        .withAmountOfStock(50520)
+                        .build());
+    }
+
+    @Test
+    public void toDomainWithId_givenIdNotMatchingIdInDto_theThrowException() {
+        UUID itemIdPath = UUID.randomUUID();
+        UUID itemIdBody = UUID.randomUUID();
+
+        expectedException.expectMessage("When updating an item, the provided ID in the path should match the " +
+                "ID in the body: ID in path = " + itemIdPath.toString() + ", ID in body = " + itemIdBody.toString());
+        expectedException.expect(IllegalArgumentException.class);
+
+        new ItemMapper()
+                .toDomain(itemIdPath, new ItemDto().withId(itemIdBody));
+
     }
 
     @Test

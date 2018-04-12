@@ -100,7 +100,7 @@ public class ItemControllerIntegrationTest extends ControllerIntegrationTest {
                 .withAmountOfStock(10);
 
         ResponseEntity<ItemDto> result = new TestRestTemplate()
-                .exchange(format("http://localhost:%s/%s", getPort(), ItemController.RESOURCE_NAME),
+                .exchange(format("http://localhost:%s/%s/%s", getPort(), ItemController.RESOURCE_NAME, alreadyExistingItem.getId().toString()),
                         HttpMethod.PUT,
                         new HttpEntity<>(itemToUpdate),
                         ItemDto.class);
