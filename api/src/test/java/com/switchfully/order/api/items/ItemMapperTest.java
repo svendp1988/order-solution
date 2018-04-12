@@ -63,7 +63,7 @@ public class ItemMapperTest {
     }
 
     @Test
-    public void toDomainWithId_givenIdNotMatchingIdInDto_theThrowException() {
+    public void toDomainWithId_givenIdNotMatchingIdInDto_thenThrowException() {
         UUID itemIdPath = UUID.randomUUID();
         UUID itemIdBody = UUID.randomUUID();
 
@@ -73,7 +73,27 @@ public class ItemMapperTest {
 
         new ItemMapper()
                 .toDomain(itemIdPath, new ItemDto().withId(itemIdBody));
+    }
 
+    @Test
+    public void toDomainWithId_givenIdButIdInBodyIsNull_thenUseGivenId() {
+        UUID itemId = UUID.randomUUID();
+
+        Item item = new ItemMapper().toDomain(itemId, new ItemDto()
+                .withoutId()
+                .withName("Half-Life 3")
+                .withDescription("Boehoehoe")
+                .withPrice(45f)
+                .withAmountOfStock(50520));
+
+        assertThat(item)
+                .isEqualToComparingFieldByFieldRecursively(item()
+                        .withId(itemId)
+                        .withName("Half-Life 3")
+                        .withDescription("Boehoehoe")
+                        .withPrice(Price.create(BigDecimal.valueOf(45.0)))
+                        .withAmountOfStock(50520)
+                        .build());
     }
 
     @Test

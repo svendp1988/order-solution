@@ -19,6 +19,11 @@ public class ItemDto {
         return this;
     }
 
+    public ItemDto withoutId() {
+        this.id = null;
+        return this;
+    }
+
     public ItemDto withName(String name) {
         this.name = name;
         return this;

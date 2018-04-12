@@ -14,6 +14,9 @@ import static com.switchfully.order.domain.items.Item.ItemBuilder.item;
 public class ItemMapper extends Mapper<ItemDto, Item> {
 
     public Item toDomain(UUID itemId, ItemDto itemDto) {
+        if(itemDto.getId() == null) {
+            return toDomain(itemDto.withId(itemId));
+        }
         if(!itemId.toString().equals(itemDto.getId())) {
             throw new IllegalArgumentException("When updating an item, the provided ID in the path should match the ID in the body: " +
                     "ID in path = " + itemId.toString() + ", ID in body = " + itemDto.getId());
