@@ -80,11 +80,18 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         private Error() {
         }
 
-        private Error(Exception exception, HttpStatus httpStatus, HttpServletRequest request){
+        private Error(Exception exception, HttpStatus httpStatus, HttpServletRequest request) {
             uniqueErrorId = UUID.randomUUID().toString();
-            this.message = exception.getMessage();
+            this.message = getMessage(exception);
             this.httpStatus = httpStatus.value();
             logError(exception, request);
+        }
+
+        private String getMessage(Exception exception) {
+            if (exception.getMessage() != null) {
+                return exception.getMessage();
+            } return "Something went wrong, please review your request and try again. If the error persists, " +
+                    "please contact us at somethingwentwrong@mywebsite.com";
         }
 
         private void logError(Exception e, HttpServletRequest request) {
