@@ -13,9 +13,9 @@ import java.util.UUID;
 @Named
 public class CustomerMapper extends Mapper<CustomerDto, Customer> {
 
-    private AddressMapper addressMapper;
-    private EmailMapper emailMapper;
-    private PhoneNumberMapper phoneNumberMapper;
+    private final AddressMapper addressMapper;
+    private final EmailMapper emailMapper;
+    private final PhoneNumberMapper phoneNumberMapper;
 
     @Inject
     public CustomerMapper(AddressMapper addressMapper, EmailMapper emailMapper, PhoneNumberMapper phoneNumberMapper) {

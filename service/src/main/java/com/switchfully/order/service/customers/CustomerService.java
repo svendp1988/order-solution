@@ -12,8 +12,8 @@ import java.util.UUID;
 @Named
 public class CustomerService {
 
-    private CustomerRepository customerRepository;
-    private CustomerValidator customerValidator;
+    private final CustomerRepository customerRepository;
+    private final CustomerValidator customerValidator;
 
     @Inject
     public CustomerService(CustomerRepository customerRepository, CustomerValidator customerValidator) {

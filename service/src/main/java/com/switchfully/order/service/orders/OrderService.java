@@ -24,10 +24,10 @@ import static com.switchfully.order.domain.orders.Order.OrderBuilder.order;
 @Named
 public class OrderService {
 
-    private CustomerRepository customerRepository;
-    private ItemRepository itemRepository;
-    private OrderRepository orderRepository;
-    private OrderValidator orderValidator;
+    private final CustomerRepository customerRepository;
+    private final ItemRepository itemRepository;
+    private final OrderRepository orderRepository;
+    private final OrderValidator orderValidator;
 
     @Inject
     public OrderService(CustomerRepository customerRepository,

@@ -21,9 +21,9 @@ import static com.switchfully.order.domain.orders.Order.OrderBuilder.order;
 @Named
 public class OrderMapper {
 
-    private OrderItemMapper orderItemMapper;
-    private AddressMapper addressMapper;
-    private CustomerService customerService;
+    private final OrderItemMapper orderItemMapper;
+    private final AddressMapper addressMapper;
+    private final CustomerService customerService;
 
     public OrderMapper(OrderItemMapper orderItemMapper, AddressMapper addressMapper, CustomerService customerService) {
         this.orderItemMapper = orderItemMapper;

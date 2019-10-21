@@ -17,8 +17,8 @@ public class ItemController {
 
     public static final String RESOURCE_NAME = "items";
 
-    private ItemService itemService;
-    private ItemMapper itemMapper;
+    private final ItemService itemService;
+    private final ItemMapper itemMapper;
 
     @Inject
     public ItemController(ItemService itemService, ItemMapper itemMapper) {
@@ -26,21 +26,21 @@ public class ItemController {
         this.itemMapper = itemMapper;
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ItemDto createItem(@RequestBody ItemDto itemDto) {
         return itemMapper.toDto(
                 itemService.createItem(
                         itemMapper.toDomain(itemDto)));
     }
 
-    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ItemDto updateItem(@PathVariable String id, @RequestBody ItemDto itemDto) {
         return itemMapper.toDto(
                 itemService.updateItem(
                         itemMapper.toDomain(UUID.fromString(id), itemDto)));
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ItemDto> getAllItems(@RequestParam(name = "stockUrgency", required = false) String stockUrgency) {
         List<ItemDto> allItems = itemService.getAllItems().stream()
                 .map(item -> itemMapper.toDto(item))

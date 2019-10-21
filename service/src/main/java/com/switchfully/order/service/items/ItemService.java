@@ -12,8 +12,8 @@ import java.util.UUID;
 @Named
 public class ItemService {
 
-    private ItemRepository itemRepository;
-    private ItemValidator itemValidator;
+    private final ItemRepository itemRepository;
+    private final ItemValidator itemValidator;
 
     @Inject
     public ItemService(ItemRepository itemRepository, ItemValidator itemValidator) {

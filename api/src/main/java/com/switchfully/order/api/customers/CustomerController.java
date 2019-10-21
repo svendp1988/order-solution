@@ -15,8 +15,8 @@ public class CustomerController {
 
     public static final String RESOURCE_NAME = "customers";
 
-    private CustomerService customerService;
-    private CustomerMapper customerMapper;
+    private final CustomerService customerService;
+    private final CustomerMapper customerMapper;
 
     @Inject
     public CustomerController(CustomerService customerService, CustomerMapper customerMapper) {
@@ -24,21 +24,21 @@ public class CustomerController {
         this.customerMapper = customerMapper;
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public CustomerDto createCustomer(@RequestBody CustomerDto customerDto) {
         return customerMapper.toDto(
                 customerService.createCustomer(
                         customerMapper.toDomain(customerDto)));
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CustomerDto> getAllCustomers() {
         return customerService.getAllCustomers().stream()
                 .map(customerMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CustomerDto getCustomer(@PathVariable String id) {
         return customerMapper.toDto(
                 customerService.getCustomer(UUID.fromString(id)));

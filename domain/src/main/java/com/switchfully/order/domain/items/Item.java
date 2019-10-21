@@ -8,9 +8,9 @@ import java.util.UUID;
 
 public class Item extends Entity {
 
-    private String name;
-    private String description;
-    private Price price;
+    private final String name;
+    private final String description;
+    private final Price price;
     private int amountOfStock;
 
     public Item(ItemBuilder itemBuilder) {

@@ -12,8 +12,8 @@ import java.util.UUID;
 
 public class Order extends Entity {
 
-    private List<OrderItem> orderItems;
-    private UUID customerId;
+    private final List<OrderItem> orderItems;
+    private final UUID customerId;
 
     public Order(OrderBuilder orderBuilder) {
         super(orderBuilder.id);

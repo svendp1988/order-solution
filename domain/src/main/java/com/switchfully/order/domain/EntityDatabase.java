@@ -14,7 +14,8 @@ public abstract class EntityDatabase<T extends Entity> {
         entities = new HashMap<>();
     }
 
-    void poplulate(T... entities) {
+    @SafeVarargs
+    final void populate(T... entities) {
         this.entities = Arrays.stream(entities)
                 .collect(Collectors.toMap(Entity::getId, entity -> entity));
     }

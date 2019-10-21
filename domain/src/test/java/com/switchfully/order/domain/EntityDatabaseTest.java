@@ -21,7 +21,7 @@ public class EntityDatabaseTest {
         customer2.generateId();
         customer3.generateId();
 
-        database.poplulate(customer1, customer2, customer3);
+        database.populate(customer1, customer2, customer3);
 
         Assertions.assertThat(database.getAll()).hasSize(3);
         Assertions.assertThat(database.getAll().values()).containsExactlyInAnyOrder(customer1, customer2, customer3);
@@ -32,7 +32,7 @@ public class EntityDatabaseTest {
         EntityDatabase<Customer> database = new CustomerDatabase();
         Customer customer = aCustomer().build();
         customer.generateId();
-        database.poplulate(customer);
+        database.populate(customer);
 
         Customer customer2 = aCustomer().build();
         customer2.generateId();
@@ -46,7 +46,7 @@ public class EntityDatabaseTest {
         EntityDatabase<Customer> database = new CustomerDatabase();
         Customer customer = aCustomer().withFirstname("OriginalName").build();
         customer.generateId();
-        database.poplulate(customer);
+        database.populate(customer);
 
         Customer customer2 = aCustomer().withFirstname("NewName").build();
         Whitebox.setInternalState(customer2, "id", customer.getId());

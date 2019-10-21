@@ -10,11 +10,11 @@ import java.util.UUID;
 
 public class Customer extends Entity {
 
-    private String firstname;
-    private String lastname;
-    private Email email;
-    private Address address;
-    private PhoneNumber phoneNumber;
+    private final String firstname;
+    private final String lastname;
+    private final Email email;
+    private final Address address;
+    private final PhoneNumber phoneNumber;
 
     private Customer(CustomerBuilder customerBuilder) {
         super(customerBuilder.id);
