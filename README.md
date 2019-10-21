@@ -34,6 +34,10 @@ www.switchfully.com
     - Execute command `mvn spring-boot:run` from inside module (folder) war
 - Surf to `http://localhost:9000/example`
 
+## OpenAPI / Swagger Documentation
+- Read the generated documentation of our API (using OpenAPI / Swagger) on http://localhost:9000/swagger-ui.html
+    - It hosts the Swagger-UI web-app.
+
 ## REST Endpoints
 
 ### Customers
