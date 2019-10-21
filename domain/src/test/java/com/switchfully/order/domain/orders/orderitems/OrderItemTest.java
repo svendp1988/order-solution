@@ -1,7 +1,7 @@
 package com.switchfully.order.domain.orders.orderitems;
 
 import com.switchfully.order.domain.items.prices.Price;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.Clock;
@@ -12,10 +12,10 @@ import java.time.ZoneId;
 import static com.switchfully.order.domain.orders.orderitems.OrderItem.OrderItemBuilder.orderItem;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OrderItemTest {
+class OrderItemTest {
 
     @Test
-    public void getShippingDate_givenItemWasInStock_thenReturnCurrentDatePlusOneDay() {
+    void getShippingDate_givenItemWasInStock_thenReturnCurrentDatePlusOneDay() {
         Clock fixedClock = Clock.fixed(Instant.now(), ZoneId.systemDefault());
         OrderItem orderItem = new OrderItem(orderItem()
                 .withOrderedAmount(5)
@@ -26,7 +26,7 @@ public class OrderItemTest {
     }
 
     @Test
-    public void getShippingDate_givenItemWasNotInStock_thenReturnCurrentDatePlusSevenDays() {
+    void getShippingDate_givenItemWasNotInStock_thenReturnCurrentDatePlusSevenDays() {
         Clock fixedClock = Clock.fixed(Instant.now(), ZoneId.systemDefault());
         OrderItem orderItem = new OrderItem(orderItem()
                 .withOrderedAmount(5)
@@ -37,7 +37,7 @@ public class OrderItemTest {
     }
 
     @Test
-    public void getTotalPrice() {
+    void getTotalPrice() {
         OrderItem orderItem = orderItem()
                 .withItemPrice(Price.create(BigDecimal.valueOf(15)))
                 .withOrderedAmount(3)

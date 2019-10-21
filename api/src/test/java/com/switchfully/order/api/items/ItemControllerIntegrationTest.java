@@ -4,8 +4,8 @@ import com.switchfully.order.ControllerIntegrationTest;
 import com.switchfully.order.domain.items.Item;
 import com.switchfully.order.domain.items.ItemRepository;
 import com.switchfully.order.domain.items.prices.Price;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -18,7 +18,7 @@ import static com.switchfully.order.domain.items.ItemTestBuilder.anItem;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ItemControllerIntegrationTest extends ControllerIntegrationTest {
+class ItemControllerIntegrationTest extends ControllerIntegrationTest {
 
     @Inject
     private ItemRepository itemRepository;
@@ -26,13 +26,13 @@ public class ItemControllerIntegrationTest extends ControllerIntegrationTest {
     @Inject
     private ItemMapper itemMapper;
 
-    @After
-    public void resetDatabase() {
+    @AfterEach
+    void resetDatabase() {
         itemRepository.reset();
     }
 
     @Test
-    public void createItem() {
+    void createItem() {
         ItemDto itemToCreate = new ItemDto()
                 .withName("Half-Life 3")
                 .withDescription("Boehoehoe...")
@@ -47,7 +47,7 @@ public class ItemControllerIntegrationTest extends ControllerIntegrationTest {
     }
 
     @Test
-    public void getAllItems() {
+    void getAllItems() {
         Item item1 = itemRepository.save(anItem().withAmountOfStock(12).build());
         Item item2 = itemRepository.save(anItem().withAmountOfStock(2).build());
         Item item3 = itemRepository.save(anItem().withAmountOfStock(16).build());
@@ -66,7 +66,7 @@ public class ItemControllerIntegrationTest extends ControllerIntegrationTest {
     }
 
     @Test
-    public void getAllItems_givenAStockUrgencyFilter_thenOnlyReturnItemsWithThatUrgency() {
+    void getAllItems_givenAStockUrgencyFilter_thenOnlyReturnItemsWithThatUrgency() {
         Item item1 = itemRepository.save(anItem().withAmountOfStock(12).build());
         Item item2 = itemRepository.save(anItem().withAmountOfStock(20).build());
         itemRepository.save(anItem().withAmountOfStock(8).build());
@@ -84,7 +84,7 @@ public class ItemControllerIntegrationTest extends ControllerIntegrationTest {
     }
 
     @Test
-    public void updateItem() {
+    void updateItem() {
         Item alreadyExistingItem = itemRepository.save(anItem()
                 .withName("Laptop X10")
                 .withDescription("A fancy laptop")

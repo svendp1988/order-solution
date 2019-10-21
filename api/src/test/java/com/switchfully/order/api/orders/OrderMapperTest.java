@@ -13,8 +13,8 @@ import com.switchfully.order.domain.items.prices.Price;
 import com.switchfully.order.domain.orders.Order;
 import com.switchfully.order.domain.orders.orderitems.OrderItem;
 import com.switchfully.order.service.customers.CustomerService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
@@ -26,19 +26,19 @@ import static com.switchfully.order.domain.orders.OrderTestBuilder.anOrder;
 import static com.switchfully.order.domain.orders.orderitems.OrderItemTestBuilder.anOrderItem;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-public class OrderMapperTest {
+class OrderMapperTest {
 
     private OrderItemMapper orderItemMapperMock;
     private AddressMapper addressMapper;
     private CustomerService customerService;
     private OrderMapper orderMapper;
 
-    @Before
-    public void setupService() {
+    @BeforeEach
+    void setupService() {
         orderItemMapperMock = Mockito.mock(OrderItemMapper.class);
         addressMapper = Mockito.mock(AddressMapper.class);
         customerService = Mockito.mock(CustomerService.class);
@@ -46,7 +46,7 @@ public class OrderMapperTest {
     }
 
     @Test
-    public void toDomain() {
+    void toDomain() {
         OrderItem orderItem = anOrderItem().build();
         when(orderItemMapperMock.toDomain(any(ItemGroupDto.class))).thenReturn(orderItem);
 
@@ -66,7 +66,7 @@ public class OrderMapperTest {
     }
 
     @Test
-    public void toDto() {
+    void toDto() {
         UUID customerId = UUID.randomUUID();
         UUID orderId = UUID.randomUUID();
         Order order = anOrder().withCustomerId(customerId).withId(orderId).build();
@@ -88,7 +88,7 @@ public class OrderMapperTest {
     }
 
     @Test
-    public void toOrderAfterCreationDto() {
+    void toOrderAfterCreationDto() {
         Order order = anOrder().withId(UUID.randomUUID()).build();
 
         OrderAfterCreationDto orderAfterCreationDto = orderMapper.toOrderAfterCreationDto(order);
@@ -99,7 +99,7 @@ public class OrderMapperTest {
     }
 
     @Test
-    public void toOrdersReportDto() {
+    void toOrdersReportDto() {
         OrderItem orderItem1 = anOrderItem().build();
         Order order1 = anOrder().withId(UUID.randomUUID()).withOrderItems(orderItem1).build();
         ItemGroupReportDto itemGroupReportDto = new ItemGroupReportDto();
@@ -118,7 +118,7 @@ public class OrderMapperTest {
     }
 
     @Test
-    public void toOrdersReportDto_multipleOrderItems() {
+    void toOrdersReportDto_multipleOrderItems() {
         OrderItem orderItem1 = anOrderItem().withItemPrice(Price.create(BigDecimal.valueOf(35))).build();
         OrderItem orderItem2 = anOrderItem().withItemPrice(Price.create(BigDecimal.valueOf(45))).build();
         OrderItem orderItem3 = anOrderItem().withItemPrice(Price.create(BigDecimal.valueOf(40))).build();

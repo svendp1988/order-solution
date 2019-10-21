@@ -6,10 +6,9 @@ import com.switchfully.order.domain.items.prices.Price;
 import com.switchfully.order.domain.orders.orderitems.OrderItem;
 import com.switchfully.order.infrastructure.exceptions.EntityNotFoundException;
 import com.switchfully.order.service.items.ItemService;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
@@ -21,22 +20,19 @@ import static com.switchfully.order.domain.orders.orderitems.OrderItemTestBuilde
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class OrderItemMapperTest {
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+class OrderItemMapperTest {
 
     private OrderItemMapper orderItemMapper;
     private ItemService itemServiceMock;
 
-    @Before
-    public void setupService() {
+    @BeforeEach
+    void setupService() {
         itemServiceMock = Mockito.mock(ItemService.class);
         orderItemMapper = new OrderItemMapper(itemServiceMock);
     }
 
     @Test
-    public void toDto() {
+    void toDto() {
         UUID itemId = UUID.randomUUID();
         ItemGroupDto itemGroupDto = orderItemMapper.toDto(
                 anOrderItem()
@@ -52,7 +48,7 @@ public class OrderItemMapperTest {
     }
 
     @Test
-    public void toDomain() {
+    void toDomain() {
         UUID itemId = UUID.randomUUID();
         Price itemPrice = Price.create(BigDecimal.valueOf(45.95));
         when(itemServiceMock.getItem(itemId))
@@ -71,23 +67,22 @@ public class OrderItemMapperTest {
     }
 
     @Test
-    public void toDomain_givenItemIdThatDoesNotExist_thenThrowException() {
+    void toDomain_givenItemIdThatDoesNotExist_thenThrowException() {
         UUID itemId = UUID.randomUUID();
         when(itemServiceMock.getItem(itemId))
                 .thenReturn(null);
 
-        expectedException.expect(EntityNotFoundException.class);
-        expectedException.expectMessage("During mapping to an order of an item group (for creating a new " +
-                "order), the following entity was not found: Item with id = " + itemId.toString());
-
-        orderItemMapper.toDomain(
-                new ItemGroupDto()
-                        .withItemId(itemId.toString())
-                        .withOrderedAmount(2));
+        Assertions.assertThatExceptionOfType(EntityNotFoundException.class)
+                .isThrownBy(() -> orderItemMapper.toDomain(
+                        new ItemGroupDto()
+                                .withItemId(itemId.toString())
+                                .withOrderedAmount(2)))
+                .withMessage("During mapping to an order of an item group (for creating a new " +
+                        "order), the following entity was not found: Item with id = " + itemId.toString());
     }
 
     @Test
-    public void toItemGroupReportDto() {
+    void toItemGroupReportDto() {
         UUID itemId = UUID.randomUUID();
         when(itemServiceMock.getItem(itemId)).thenReturn(anItem()
                 .withName("iPot")

@@ -8,8 +8,8 @@ import com.switchfully.order.domain.items.ItemRepository;
 import com.switchfully.order.domain.items.prices.Price;
 import com.switchfully.order.domain.orders.Order;
 import com.switchfully.order.domain.orders.OrderRepository;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
@@ -22,7 +22,7 @@ import static com.switchfully.order.domain.orders.OrderTestBuilder.anOrder;
 import static com.switchfully.order.domain.orders.orderitems.OrderItemTestBuilder.anOrderItem;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OrderServiceIntegrationTest extends IntegrationTest {
+class OrderServiceIntegrationTest extends IntegrationTest {
 
     @Inject
     private OrderService orderService;
@@ -36,15 +36,15 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
     @Inject
     private ItemRepository itemRepository;
 
-    @After
-    public void resetDatabase() {
+    @AfterEach
+    void resetDatabase() {
         orderRepository.reset();
         customerRepository.reset();
         itemRepository.reset();
     }
 
     @Test
-    public void createOrder() {
+    void createOrder() {
         Item existingItem = itemRepository.save(anItem()
                 .withAmountOfStock(20)
                 .build());
@@ -65,7 +65,7 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void getAllOrders() {
+    void getAllOrders() {
         Item item = itemRepository.save(anItem().build());
         Order order1 = orderRepository.save(anOrder().withOrderItems(anOrderItem().withItemId(item.getId()).build()).build());
         Order order2 = orderRepository.save(anOrder().withOrderItems(anOrderItem().withItemId(item.getId()).build()).build());
@@ -77,7 +77,7 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void getAllOrders_onlyIncludeShippableToday() {
+    void getAllOrders_onlyIncludeShippableToday() {
         Item item = itemRepository.save(anItem().build());
         Order order1 = orderRepository.save(anOrder().withOrderItems(anOrderItem().withItemId(item.getId()).build()).build());
 
@@ -89,7 +89,7 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void getOrdersForCustomer(){
+    void getOrdersForCustomer(){
         Customer existingCustomer1 = customerRepository.save(aCustomer().build());
         Customer existingCustomer2 = customerRepository.save(aCustomer().build());
         Item existingItem1 = itemRepository.save(anItem().build());
@@ -111,7 +111,7 @@ public class OrderServiceIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void reorderOrder() {
+    void reorderOrder() {
         Customer customerOfOrder = customerRepository.save(aCustomer().build());
         Item itemFromOrder = itemRepository.save(anItem()
                 .withPrice(Price.create(BigDecimal.valueOf(8.0)))

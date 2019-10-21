@@ -8,8 +8,8 @@ import com.switchfully.order.api.interceptors.ControllerExceptionHandler;
 import com.switchfully.order.domain.customers.Customer;
 import com.switchfully.order.domain.customers.CustomerRepository;
 import com.switchfully.order.domain.customers.CustomerTestBuilder;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 
@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CustomerControllerIntegrationTest extends ControllerIntegrationTest {
+class CustomerControllerIntegrationTest extends ControllerIntegrationTest {
 
     @Inject
     private CustomerRepository customerRepository;
@@ -26,13 +26,13 @@ public class CustomerControllerIntegrationTest extends ControllerIntegrationTest
     @Inject
     private CustomerMapper customerMapper;
 
-    @After
-    public void resetDatabase() {
+    @AfterEach
+    void resetDatabase() {
         customerRepository.reset();
     }
 
     @Test
-    public void createCustomer() {
+    void createCustomer() {
         CustomerDto customerToCreate = new CustomerDto()
                 .withFirstname("Bruce")
                 .withLastname("Wayne")
@@ -56,7 +56,7 @@ public class CustomerControllerIntegrationTest extends ControllerIntegrationTest
     }
 
     @Test
-    public void createCustomer_givenCustomerNotValidForCreationBecauseOfMissingFirstName_thenErrorObjectReturnedByControllerExceptionHandler() {
+    void createCustomer_givenCustomerNotValidForCreationBecauseOfMissingFirstName_thenErrorObjectReturnedByControllerExceptionHandler() {
         CustomerDto customerToCreate = new CustomerDto()
                 .withFirstname(null)
                 .withLastname("Wayne")
@@ -84,7 +84,7 @@ public class CustomerControllerIntegrationTest extends ControllerIntegrationTest
     }
 
     @Test
-    public void getAllCustomers() {
+    void getAllCustomers() {
         customerRepository.save(CustomerTestBuilder.aCustomer().build());
         customerRepository.save(CustomerTestBuilder.aCustomer().build());
         customerRepository.save(CustomerTestBuilder.aCustomer().build());
@@ -96,7 +96,7 @@ public class CustomerControllerIntegrationTest extends ControllerIntegrationTest
     }
 
     @Test
-    public void getAllCustomers_assertResultIsCorrectlyReturned() {
+    void getAllCustomers_assertResultIsCorrectlyReturned() {
         Customer customerInDb = customerRepository.save(CustomerTestBuilder.aCustomer().build());
 
         CustomerDto[] allCustomers = new TestRestTemplate()
@@ -108,7 +108,7 @@ public class CustomerControllerIntegrationTest extends ControllerIntegrationTest
     }
 
     @Test
-    public void getCustomer() {
+    void getCustomer() {
         customerRepository.save(CustomerTestBuilder.aCustomer().build());
         Customer customerToFind = customerRepository.save(CustomerTestBuilder.aCustomer().build());
         customerRepository.save(CustomerTestBuilder.aCustomer().build());

@@ -3,14 +3,14 @@ package com.switchfully.order.domain;
 import com.switchfully.order.domain.customers.Customer;
 import com.switchfully.order.domain.customers.CustomerDatabase;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.switchfully.order.domain.customers.CustomerTestBuilder.aCustomer;
 
-public class EntityDatabaseTest {
+class EntityDatabaseTest {
 
     @Test
-    public void poplulate_getAll() {
+    void poplulate_getAll() {
         EntityDatabase<Customer> database = new CustomerDatabase();
         Customer customer1 = aCustomer().build();
         Customer customer2 = aCustomer().build();
@@ -27,7 +27,7 @@ public class EntityDatabaseTest {
     }
 
     @Test
-    public void save_givenDifferentId_thenStoreBoth() {
+    void save_givenDifferentId_thenStoreBoth() {
         EntityDatabase<Customer> database = new CustomerDatabase();
         Customer customer = aCustomer().build();
         customer.generateId();

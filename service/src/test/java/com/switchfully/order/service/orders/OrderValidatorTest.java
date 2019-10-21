@@ -1,24 +1,24 @@
 package com.switchfully.order.service.orders;
 
 import com.switchfully.order.domain.orders.orderitems.OrderItemTestBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
 import static com.switchfully.order.domain.orders.OrderTestBuilder.anOrder;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OrderValidatorTest {
+class OrderValidatorTest {
 
     @Test
-    public void isValidForCreation_happyPath() {
+    void isValidForCreation_happyPath() {
         assertThat(new OrderValidator()
                 .isValidForCreation(anOrder().build()))
                 .isTrue();
     }
 
     @Test
-    public void isValidForCreation_givenAnId_thenNotValidForCreation() {
+    void isValidForCreation_givenAnId_thenNotValidForCreation() {
         assertThat(new OrderValidator()
                 .isValidForCreation(anOrder()
                         .withId(UUID.randomUUID())
@@ -33,7 +33,7 @@ public class OrderValidatorTest {
      * Check the ItemValidatorTest for a better example.
      */
     @Test
-    public void isValidForCreation_givenSomeMissingValues_thenNotValidForCreation() {
+    void isValidForCreation_givenSomeMissingValues_thenNotValidForCreation() {
         assertThat(new OrderValidator()
                 .isValidForCreation(anOrder()
                         .withCustomerId(null)

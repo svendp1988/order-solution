@@ -2,14 +2,14 @@ package com.switchfully.order.api.customers.phonenumbers;
 
 import com.switchfully.order.domain.customers.phonenumbers.PhoneNumber;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.switchfully.order.domain.customers.phonenumbers.PhoneNumber.PhoneNumberBuilder.phoneNumber;
 
-public class PhoneNumberMapperTest {
+class PhoneNumberMapperTest {
 
     @Test
-    public void toDto() {
+    void toDto() {
         PhoneNumberDto phoneNumberDto = new PhoneNumberMapper().toDto(phoneNumber()
                 .withNumber("4848522541")
                 .withCountryCallingCode("+32")
@@ -22,7 +22,7 @@ public class PhoneNumberMapperTest {
     }
 
     @Test
-    public void toDomain() {
+    void toDomain() {
         PhoneNumber phoneNumber = new PhoneNumberMapper().toDomain(new PhoneNumberDto()
                 .withNumber("4848522541")
                 .withCountryCallingCode("+32"));

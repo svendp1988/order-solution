@@ -1,22 +1,17 @@
 package com.switchfully.order.domain;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.internal.util.reflection.Whitebox;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
 import static com.switchfully.order.domain.customers.CustomerTestBuilder.aCustomer;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class EntityTest {
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+class EntityTest {
 
     @Test
-    public void generateId_givenCustomerWithoutId_whenGeneratingId_thenGenerateId() {
+    void generateId_givenCustomerWithoutId_whenGeneratingId_thenGenerateId() {
         Entity aCustomer = aCustomer().build();
         aCustomer.generateId();
         Assertions.assertThat(aCustomer.getId())
@@ -25,15 +20,13 @@ public class EntityTest {
     }
 
     @Test
-    public void generateId_givenCustomerWithId_whenGeneratingId_thenThrowException() {
+    void generateId_givenCustomerWithId_whenGeneratingId_thenThrowException() {
         UUID id = UUID.randomUUID();
-        Entity customer = aCustomer().build();
-        Whitebox.setInternalState(customer, "id", id);
+        Entity customer = aCustomer().withId(id).build();
 
-        expectedException.expect(IllegalStateException.class);
-        expectedException.expectMessage("Generating an ID for a customer that already has an ID (" + id + ") is not allowed.");
-
-        customer.generateId();
+        assertThatExceptionOfType(IllegalStateException.class)
+                .isThrownBy(customer::generateId)
+                .withMessage("Generating an ID for a customer that already has an ID (" + id + ") is not allowed.");
     }
 
 }

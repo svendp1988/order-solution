@@ -1,14 +1,14 @@
 package com.switchfully.order.domain.items.prices;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
 public class PriceTest {
 
     @Test
-    public void add() {
+    void add() {
         Price price1 = Price.create(BigDecimal.valueOf(10));
         Price price2 = Price.create(BigDecimal.valueOf(10.50));
 
@@ -18,7 +18,7 @@ public class PriceTest {
     }
 
     @Test
-    public void sameAs() {
+    void sameAs() {
         Price price1 = Price.create(BigDecimal.valueOf(10));
         Price price2 = Price.create(BigDecimal.valueOf(10));
 

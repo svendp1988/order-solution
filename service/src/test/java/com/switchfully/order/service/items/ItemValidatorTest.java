@@ -2,8 +2,7 @@ package com.switchfully.order.service.items;
 
 import com.switchfully.order.domain.items.Item;
 import com.switchfully.order.domain.items.prices.Price;
-import org.junit.Test;
-import org.mockito.internal.util.reflection.Whitebox;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -11,10 +10,10 @@ import java.util.UUID;
 import static com.switchfully.order.domain.items.ItemTestBuilder.anItem;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ItemValidatorTest {
+class ItemValidatorTest {
 
     @Test
-    public void isValidForCreation_happyPath() {
+    void isValidForCreation_happyPath() {
         assertThat(new ItemValidator()
                 .isValidForCreation(anItem()
                         .build()))
@@ -22,7 +21,7 @@ public class ItemValidatorTest {
     }
 
     @Test
-    public void isValidForCreation_givenId_thenNotValidForCreation() {
+    void isValidForCreation_givenId_thenNotValidForCreation() {
         assertThat(new ItemValidator()
                 .isValidForCreation(anItem()
                         .withId(UUID.randomUUID())
@@ -31,7 +30,7 @@ public class ItemValidatorTest {
     }
 
     @Test
-    public void isValidForCreation_givenEmptyName_thenNotValidForCreation() {
+    void isValidForCreation_givenEmptyName_thenNotValidForCreation() {
         assertThat(new ItemValidator()
             .isValidForCreation(anItem()
                     .withName("")
@@ -40,7 +39,7 @@ public class ItemValidatorTest {
     }
 
     @Test
-    public void isValidForCreation_givenNullName_thenNotValidForCreation() {
+    void isValidForCreation_givenNullName_thenNotValidForCreation() {
         assertThat(new ItemValidator()
             .isValidForCreation(anItem()
                     .withName(null)
@@ -49,7 +48,7 @@ public class ItemValidatorTest {
     }
 
     @Test
-    public void isValidForCreation_givenEmptyDescription_thenNotValidForCreation() {
+    void isValidForCreation_givenEmptyDescription_thenNotValidForCreation() {
         assertThat(new ItemValidator()
             .isValidForCreation(anItem()
                     .withDescription("")
@@ -58,7 +57,7 @@ public class ItemValidatorTest {
     }
 
     @Test
-    public void isValidForCreation_givenNullDescription_thenNotValidForCreation() {
+    void isValidForCreation_givenNullDescription_thenNotValidForCreation() {
         assertThat(new ItemValidator()
             .isValidForCreation(anItem()
                     .withDescription(null)
@@ -67,7 +66,7 @@ public class ItemValidatorTest {
     }
 
     @Test
-    public void isValidForCreation_givenZeroPrice_thenNotValidForCreation() {
+    void isValidForCreation_givenZeroPrice_thenNotValidForCreation() {
         assertThat(new ItemValidator()
             .isValidForCreation(anItem()
                     .withPrice(Price.create(BigDecimal.valueOf(0)))
@@ -76,7 +75,7 @@ public class ItemValidatorTest {
     }
 
     @Test
-    public void isValidForCreation_givenNegativePrice_thenNotValidForCreation() {
+    void isValidForCreation_givenNegativePrice_thenNotValidForCreation() {
         assertThat(new ItemValidator()
             .isValidForCreation(anItem()
                     .withPrice(Price.create(BigDecimal.valueOf(-1)))
@@ -85,7 +84,7 @@ public class ItemValidatorTest {
     }
 
     @Test
-    public void isValidForCreation_givenNullPrice_thenNotValidForCreation() {
+    void isValidForCreation_givenNullPrice_thenNotValidForCreation() {
         assertThat(new ItemValidator()
             .isValidForCreation(anItem()
                     .withPrice(null)
@@ -94,7 +93,7 @@ public class ItemValidatorTest {
     }
 
     @Test
-    public void isValidForCreation_givenNegativeStock_thenNotValidForCreation() {
+    void isValidForCreation_givenNegativeStock_thenNotValidForCreation() {
         assertThat(new ItemValidator()
             .isValidForCreation(anItem()
                     .withAmountOfStock(-1)
@@ -103,9 +102,8 @@ public class ItemValidatorTest {
     }
 
     @Test
-    public void isValidForUpdating_happyPath() {
-        Item item = anItem().build();
-        Whitebox.setInternalState(item, "id", UUID.randomUUID());
+    void isValidForUpdating_happyPath() {
+        Item item = anItem().withId(UUID.randomUUID()).build();
 
         assertThat(new ItemValidator()
                 .isValidForUpdating(item))
@@ -113,7 +111,7 @@ public class ItemValidatorTest {
     }
 
     @Test
-    public void isValidForUpdating_givenNoId_thenNotValidForUpdating() {
+    void isValidForUpdating_givenNoId_thenNotValidForUpdating() {
         assertThat(new ItemValidator()
                 .isValidForUpdating(anItem().build()))
                 .isFalse();

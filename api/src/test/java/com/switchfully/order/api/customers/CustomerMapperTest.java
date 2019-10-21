@@ -14,13 +14,12 @@ import com.switchfully.order.domain.customers.emails.EmailTestBuilder;
 import com.switchfully.order.domain.customers.phonenumbers.PhoneNumber;
 import com.switchfully.order.domain.customers.phonenumbers.PhoneNumberTestBuilder;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.internal.util.reflection.Whitebox;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
@@ -30,8 +29,8 @@ import static com.switchfully.order.domain.customers.phonenumbers.PhoneNumberTes
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CustomerMapperTest {
+@ExtendWith(MockitoExtension.class)
+class CustomerMapperTest {
 
     @Mock
     private AddressMapper addressMapperMock;
@@ -46,7 +45,7 @@ public class CustomerMapperTest {
     private CustomerMapper customerMapper;
 
     @Test
-    public void toDto() {
+    void toDto() {
         // given
         AddressDto addressDto = new AddressDto();
         EmailDto emailDto = new EmailDto();
@@ -60,15 +59,15 @@ public class CustomerMapperTest {
         when(emailMapperMock.toDto(email)).thenReturn(emailDto);
         when(phoneNumberMapperMock.toDto(phoneNumber)).thenReturn(phoneNumberDto);
 
+        UUID customerId = UUID.randomUUID();
         Customer customer = Customer.CustomerBuilder.customer()
+                .withId(customerId)
                 .withFirstname("Koen")
                 .withLastname("Kasteels")
                 .withAddress(address)
                 .withEmail(email)
                 .withPhoneNumber(phoneNumber)
                 .build();
-        UUID customerId = UUID.randomUUID();
-        Whitebox.setInternalState(customer, "id", customerId);
 
         // when
         CustomerDto customerDto = customerMapper.toDto(customer);
@@ -89,7 +88,7 @@ public class CustomerMapperTest {
     }
 
     @Test
-    public void toDomain() {
+    void toDomain() {
         // given
         AddressDto addressDto = new AddressDto();
         EmailDto emailDto = new EmailDto();
@@ -127,7 +126,7 @@ public class CustomerMapperTest {
     }
 
     @Test
-    public void toDomain_mapTheID() {
+    void toDomain_mapTheID() {
         Customer customer = customerMapper.toDomain(new CustomerDto()
                 .withId(UUID.randomUUID()));
 

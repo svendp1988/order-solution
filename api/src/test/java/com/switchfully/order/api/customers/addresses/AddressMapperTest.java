@@ -2,14 +2,14 @@ package com.switchfully.order.api.customers.addresses;
 
 import com.switchfully.order.domain.customers.addresses.Address;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.switchfully.order.domain.customers.addresses.Address.AddressBuilder.address;
 
-public class AddressMapperTest {
+class AddressMapperTest {
 
     @Test
-    public void toDto() {
+    void toDto() {
         AddressDto addressDto = new AddressMapper().toDto(address()
                 .withStreetName("Teststraat")
                 .withHouseNumber("88B")
@@ -26,7 +26,7 @@ public class AddressMapperTest {
     }
 
     @Test
-    public void toDomain() {
+    void toDomain() {
         Address address = new AddressMapper().toDomain(new AddressDto()
                 .withStreetName("Teststraat")
                 .withHouseNumber("88B")

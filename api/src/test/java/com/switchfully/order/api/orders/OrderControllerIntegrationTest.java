@@ -13,8 +13,8 @@ import com.switchfully.order.domain.items.ItemRepository;
 import com.switchfully.order.domain.items.prices.Price;
 import com.switchfully.order.domain.orders.Order;
 import com.switchfully.order.domain.orders.OrderRepository;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import javax.inject.Inject;
@@ -28,7 +28,7 @@ import static com.switchfully.order.domain.orders.orderitems.OrderItemTestBuilde
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OrderControllerIntegrationTest extends ControllerIntegrationTest {
+class OrderControllerIntegrationTest extends ControllerIntegrationTest {
 
     @Inject
     private CustomerRepository customerRepository;
@@ -39,15 +39,15 @@ public class OrderControllerIntegrationTest extends ControllerIntegrationTest {
     @Inject
     private OrderRepository orderRepository;
 
-    @After
-    public void resetDatabase() {
+    @AfterEach
+    void resetDatabase() {
         customerRepository.reset();
         itemRepository.reset();
         orderRepository.reset();
     }
 
     @Test
-    public void createOrder() {
+    void createOrder() {
         Customer customer = customerRepository.save(aCustomer().build());
         Item itemOne = itemRepository.save(anItem()
                 .withAmountOfStock(10)
@@ -80,7 +80,7 @@ public class OrderControllerIntegrationTest extends ControllerIntegrationTest {
     }
 
     @Test
-    public void getAllOrders_includeOnlyShippableToday() {
+    void getAllOrders_includeOnlyShippableToday() {
         Customer existingCustomer1 = customerRepository.save(aCustomer().build());
         Item existingItem1 = itemRepository.save(anItem().build());
         Item existingItem2 = itemRepository.save(anItem().build());
@@ -102,7 +102,7 @@ public class OrderControllerIntegrationTest extends ControllerIntegrationTest {
     }
 
     @Test
-    public void reorderOrder() {
+    void reorderOrder() {
         Customer customer = customerRepository.save(aCustomer().build());
         Item itemOne = itemRepository.save(anItem()
                 .withAmountOfStock(12)
@@ -130,7 +130,7 @@ public class OrderControllerIntegrationTest extends ControllerIntegrationTest {
     }
 
     @Test
-    public void getOrdersForCustomerReport() {
+    void getOrdersForCustomerReport() {
         Customer existingCustomer1 = customerRepository.save(aCustomer().build());
         Item existingItem1 = itemRepository.save(anItem().build());
         Item existingItem2 = itemRepository.save(anItem().build());

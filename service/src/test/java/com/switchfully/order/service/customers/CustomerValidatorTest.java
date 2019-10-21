@@ -1,16 +1,16 @@
 package com.switchfully.order.service.customers;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
 import static com.switchfully.order.domain.customers.CustomerTestBuilder.aCustomer;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CustomerValidatorTest {
+class CustomerValidatorTest {
 
     @Test
-    public void isValidForCreation_happyPath() {
+    void isValidForCreation_happyPath() {
         assertThat(new CustomerValidator()
                 .isValidForCreation(aCustomer()
                         .build()))
@@ -18,7 +18,7 @@ public class CustomerValidatorTest {
     }
 
     @Test
-    public void isValidForCreation_givenAnId_thenNotValidForCreation() {
+    void isValidForCreation_givenAnId_thenNotValidForCreation() {
         assertThat(new CustomerValidator()
                 .isValidForCreation(aCustomer()
                         .withId(UUID.randomUUID())
@@ -33,7 +33,7 @@ public class CustomerValidatorTest {
      * Check the ItemValidatorTest for a better example.
      */
     @Test
-    public void isValidForCreation_givenSomeMissingValues_thenNotValidForCreation() {
+    void isValidForCreation_givenSomeMissingValues_thenNotValidForCreation() {
         assertThat(new CustomerValidator()
                 .isValidForCreation(aCustomer()
                         .withId(UUID.randomUUID())

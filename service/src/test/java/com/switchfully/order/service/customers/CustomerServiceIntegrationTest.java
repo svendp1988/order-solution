@@ -3,8 +3,8 @@ package com.switchfully.order.service.customers;
 import com.switchfully.order.IntegrationTest;
 import com.switchfully.order.domain.customers.Customer;
 import com.switchfully.order.domain.customers.CustomerRepository;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 import static com.switchfully.order.domain.customers.CustomerTestBuilder.aCustomer;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CustomerServiceIntegrationTest extends IntegrationTest{
+class CustomerServiceIntegrationTest extends IntegrationTest{
 
     @Inject
     private CustomerService customerService;
@@ -20,13 +20,13 @@ public class CustomerServiceIntegrationTest extends IntegrationTest{
     @Inject
     private CustomerRepository customerRepository;
 
-    @After
-    public void resetDatabase() {
+    @AfterEach
+    void resetDatabase() {
         customerRepository.reset();
     }
 
     @Test
-    public void createCustomer() {
+    void createCustomer() {
         Customer customerToCreate = aCustomer().build();
 
         Customer createdCustomer = customerService.createCustomer(customerToCreate);
@@ -37,7 +37,7 @@ public class CustomerServiceIntegrationTest extends IntegrationTest{
     }
 
     @Test
-    public void getAllCustomers() {
+    void getAllCustomers() {
         Customer customer1 = customerService.createCustomer(aCustomer().build());
         Customer customer2 = customerService.createCustomer(aCustomer().build());
         Customer customer3 = customerService.createCustomer(aCustomer().build());
@@ -48,7 +48,7 @@ public class CustomerServiceIntegrationTest extends IntegrationTest{
     }
 
     @Test
-    public void getCustomer() {
+    void getCustomer() {
         customerService.createCustomer(aCustomer().build());
         Customer customerToFind = customerService.createCustomer(aCustomer().build());
         customerService.createCustomer(aCustomer().build());

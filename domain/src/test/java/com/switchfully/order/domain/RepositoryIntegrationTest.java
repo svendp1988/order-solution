@@ -4,8 +4,8 @@ import com.switchfully.order.IntegrationTest;
 import com.switchfully.order.domain.customers.Customer;
 import com.switchfully.order.domain.customers.CustomerDatabase;
 import org.assertj.core.api.Assertions;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -13,18 +13,18 @@ import java.util.UUID;
 
 import static com.switchfully.order.domain.customers.CustomerTestBuilder.aCustomer;
 
-public class RepositoryIntegrationTest extends IntegrationTest {
+ class RepositoryIntegrationTest extends IntegrationTest {
 
     @Inject
     private Repository<Customer, CustomerDatabase> repository;
 
-    @After
-    public void resetDatabase() {
+    @AfterEach
+    void resetDatabase() {
         repository.reset();
     }
 
     @Test
-    public void save() {
+    void save() {
         Customer customerToSave = aCustomer().build();
 
         Customer savedCustomer = repository.save(customerToSave);
@@ -35,7 +35,7 @@ public class RepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void update() {
+    void update() {
         Customer customerToSave = aCustomer().withFirstname("Jo").withLastname("Jorissen").build();
         Customer savedCustomer = repository.save(customerToSave);
 
@@ -53,7 +53,7 @@ public class RepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void get() {
+    void get() {
         Customer savedCustomer = repository.save(aCustomer().build());
 
         Customer actualCustomer = repository.get(savedCustomer.getId());
@@ -63,7 +63,7 @@ public class RepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void getAll() {
+    void getAll() {
         Customer customerOne = repository.save(aCustomer().build());
         Customer customerTwo = repository.save(aCustomer().build());
 

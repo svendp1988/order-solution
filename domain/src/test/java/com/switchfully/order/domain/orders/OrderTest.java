@@ -1,17 +1,17 @@
 package com.switchfully.order.domain.orders;
 
 import com.switchfully.order.domain.items.prices.Price;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
 import static com.switchfully.order.domain.orders.orderitems.OrderItemTestBuilder.anOrderItem;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OrderTest {
+class OrderTest {
 
     @Test
-    public void getTotalPrice_givenOrderWithOrderItems_thenTotalPriceIsSumOfPricesOfOrderItemsMultipliedByOrderedAmount() {
+    void getTotalPrice_givenOrderWithOrderItems_thenTotalPriceIsSumOfPricesOfOrderItemsMultipliedByOrderedAmount() {
         Order order = OrderTestBuilder.anOrder()
                 .withOrderItems(anOrderItem().withOrderedAmount(2).withItemPrice(Price.create(BigDecimal.valueOf(40.50))).build(),
                         anOrderItem().withOrderedAmount(1).withItemPrice(Price.create(BigDecimal.valueOf(60.50))).build(),

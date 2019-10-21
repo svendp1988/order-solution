@@ -2,14 +2,14 @@ package com.switchfully.order.api.customers.emails;
 
 import com.switchfully.order.domain.customers.emails.Email;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.switchfully.order.domain.customers.emails.Email.EmailBuilder.email;
 
-public class EmailMapperTest {
+class EmailMapperTest {
 
     @Test
-    public void toDto() {
+    void toDto() {
         EmailDto emailDto = new EmailMapper().toDto(email()
                 .withLocalPart("mail")
                 .withDomain("domain.be")
@@ -23,7 +23,7 @@ public class EmailMapperTest {
     }
 
     @Test
-    public void toDomain() {
+    void toDomain() {
         Email email = new EmailMapper().toDomain(new EmailDto()
                 .withLocalPart("mail")
                 .withDomain("domain.be")
