@@ -4,7 +4,6 @@ import com.switchfully.order.domain.customers.Customer;
 import com.switchfully.order.domain.customers.CustomerDatabase;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.mockito.internal.util.reflection.Whitebox;
 
 import static com.switchfully.order.domain.customers.CustomerTestBuilder.aCustomer;
 
@@ -39,21 +38,6 @@ public class EntityDatabaseTest {
         database.save(customer2);
 
         Assertions.assertThat(database.getAll()).hasSize(2);
-    }
-
-    @Test
-    public void save_givenSameId_thenUpdateExisting() {
-        EntityDatabase<Customer> database = new CustomerDatabase();
-        Customer customer = aCustomer().withFirstname("OriginalName").build();
-        customer.generateId();
-        database.populate(customer);
-
-        Customer customer2 = aCustomer().withFirstname("NewName").build();
-        Whitebox.setInternalState(customer2, "id", customer.getId());
-        database.save(customer2);
-
-        Assertions.assertThat(database.getAll()).hasSize(1);
-        Assertions.assertThat(database.getAll().get(customer.getId()).getFirstname()).isEqualTo("NewName");
     }
 
 }
