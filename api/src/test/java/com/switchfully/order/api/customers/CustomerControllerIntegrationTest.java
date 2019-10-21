@@ -104,7 +104,8 @@ class CustomerControllerIntegrationTest extends ControllerIntegrationTest {
 
         assertThat(allCustomers).hasSize(1);
         assertThat(allCustomers[0])
-                .isEqualToComparingFieldByFieldRecursively(customerMapper.toDto(customerInDb));
+                .usingRecursiveComparison()
+                    .isEqualTo(customerMapper.toDto(customerInDb));
     }
 
     @Test
@@ -117,7 +118,8 @@ class CustomerControllerIntegrationTest extends ControllerIntegrationTest {
                 .getForObject(format("http://localhost:%s/%s/%s", getPort(), CustomerController.RESOURCE_NAME, customerToFind.getId().toString()), CustomerDto.class);
 
         assertThat(foundCustomer)
-                .isEqualToComparingFieldByFieldRecursively(customerMapper.toDto(customerToFind));
+                .usingRecursiveComparison()
+                    .isEqualTo(customerMapper.toDto(customerToFind));
     }
 
     private void assertCustomerIsEqualIgnoringId(CustomerDto customerToCreate, CustomerDto createdCustomer) {
