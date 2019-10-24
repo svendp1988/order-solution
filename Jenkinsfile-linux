@@ -4,17 +4,17 @@ pipeline {
     stages {
         stage ('Build') {
             steps {
-                bat 'mvn install -DskipTests'
+                sh 'mvn install -DskipTests'
             }
         }
         stage ('Unit Tests') {
             steps {
-                bat 'mvn verify -DskipITs'
+                sh 'mvn verify -DskipITs'
             }
         }
         stage ('Integration Tests') {
             steps {
-                bat 'mvn verify -Dskip.surefire.tests'
+                sh 'mvn verify -Dskip.surefire.tests'
             }
         }
     }
