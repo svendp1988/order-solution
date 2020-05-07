@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/" + ItemController.RESOURCE_NAME)
+@CrossOrigin(origins = "http://localhost:4200")
 public class ItemController {
 
     public static final String RESOURCE_NAME = "items";
@@ -58,6 +59,11 @@ public class ItemController {
         } else {
             return allItems;
         }
+    }
+
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ItemDto getById(@PathVariable UUID id) {
+        return itemMapper.toDto(itemService.getItem(id));
     }
 
 }

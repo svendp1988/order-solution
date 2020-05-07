@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/" + CustomerController.RESOURCE_NAME)
+@CrossOrigin(origins = "http://localhost:4200")
 public class CustomerController {
 
     public static final String RESOURCE_NAME = "customers";
